@@ -46,7 +46,11 @@ function AddPaymentForm() {
   // Update paidBy default when selected family changes
   useEffect(() => {
     if (selectedFamily) {
-      setPaidBy(selectedFamily.husband_name || selectedFamily.name);
+      if (selectedFamily.id === 'fam-hamas' || selectedFamily.name.toLowerCase().includes('hamas')) {
+        setPaidBy('Mr. Hamas');
+      } else {
+        setPaidBy(selectedFamily.husband_name || selectedFamily.name);
+      }
     }
   }, [familyId, selectedFamily]);
 
@@ -200,28 +204,44 @@ function AddPaymentForm() {
               <>
                 <button
                   type="button"
-                  onClick={() => setPaidBy(selectedFamily.husband_name || selectedFamily.name)}
+                  onClick={() =>
+                    setPaidBy(
+                      selectedFamily.id === 'fam-hamas' || selectedFamily.name.toLowerCase().includes('hamas')
+                        ? 'Mr. Hamas'
+                        : selectedFamily.husband_name || selectedFamily.name
+                    )
+                  }
                   className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
-                    paidBy === (selectedFamily.husband_name || selectedFamily.name)
+                    paidBy ===
+                    (selectedFamily.id === 'fam-hamas' || selectedFamily.name.toLowerCase().includes('hamas')
+                      ? 'Mr. Hamas'
+                      : selectedFamily.husband_name || selectedFamily.name)
                       ? 'bg-emerald-700 text-white shadow-xs'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
                   }`}
                 >
-                  👨 {selectedFamily.husband_name || selectedFamily.name}
+                  👨{' '}
+                  {selectedFamily.id === 'fam-hamas' || selectedFamily.name.toLowerCase().includes('hamas')
+                    ? 'Mr. Hamas'
+                    : selectedFamily.husband_name || selectedFamily.name}
                 </button>
-                {selectedFamily.wife_name && selectedFamily.wife_name.trim() !== '' && (
-                  <button
-                    type="button"
-                    onClick={() => setPaidBy(selectedFamily.wife_name)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
-                      paidBy === selectedFamily.wife_name
-                        ? 'bg-emerald-700 text-white shadow-xs'
-                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
-                    }`}
-                  >
-                    🧕 {selectedFamily.wife_name}
-                  </button>
-                )}
+                {selectedFamily.id !== 'fam-hamas' &&
+                  !selectedFamily.name.toLowerCase().includes('hamas') &&
+                  selectedFamily.wife_name &&
+                  selectedFamily.wife_name.trim() !== '' &&
+                  !selectedFamily.wife_name.toLowerCase().includes('hamas') && (
+                    <button
+                      type="button"
+                      onClick={() => setPaidBy(selectedFamily.wife_name)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+                        paidBy === selectedFamily.wife_name
+                          ? 'bg-emerald-700 text-white shadow-xs'
+                          : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                      }`}
+                    >
+                      🧕 {selectedFamily.wife_name}
+                    </button>
+                  )}
               </>
             )}
           </div>

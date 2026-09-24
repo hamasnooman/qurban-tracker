@@ -3,20 +3,6 @@
 @variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #f8fafc; /* crisp modern slate-50 */
-  --foreground: #0f172a; /* slate-900 */
-  --card: #ffffff;
-  --card-foreground: #0f172a;
-  --primary: #047857; /* emerald-700 */
-  --primary-foreground: #ffffff;
-  --gold: #d97706; /* amber-600 */
-  --gold-light: #fef3c7;
-  --border: #e2e8f0; /* slate-200 */
-  --muted: #f1f5f9; /* slate-100 */
-  --muted-foreground: #64748b; /* slate-500 */
-}
-
-.dark {
   --background: #090d16; /* deep premium obsidian navy */
   --foreground: #f8fafc;
   --card: #111622;
@@ -28,6 +14,20 @@
   --border: #1e2638;
   --muted: #161c2c;
   --muted-foreground: #94a3b8;
+}
+
+.light {
+  --background: #f8fafc; /* crisp modern slate-50 */
+  --foreground: #0f172a; /* slate-900 */
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --primary: #047857; /* emerald-700 */
+  --primary-foreground: #ffffff;
+  --gold: #d97706; /* amber-600 */
+  --gold-light: #fef3c7;
+  --border: #e2e8f0; /* slate-200 */
+  --muted: #f1f5f9; /* slate-100 */
+  --muted-foreground: #64748b; /* slate-500 */
 }
 
 body {

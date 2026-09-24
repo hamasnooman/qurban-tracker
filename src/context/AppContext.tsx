@@ -80,20 +80,32 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<UserProfile>(DEFAULT_VIEWER);
   const [smsLogs, setSmsLogs] = useState<SMSLog[]>([]);
   const [isInitialized, setIsInitialized] = useState(false);
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+
+  // Completely sanitize families to ensure Mr. Hamas only (NO Mrs. Hamas)
+  const sanitizeFamilies = (raw: Family[]): Family[] => {
+    return raw.map((f) => {
+      if (f.id === 'fam-hamas' || f.name.toLowerCase().includes('hamas')) {
+        return {
+          ...f,
+          name: 'Mr. Hamas',
+          family_title: 'Mr. Hamas',
+          husband_name: 'Mr. Hamas',
+          wife_name: '',
+          wife_phone: '',
+        };
+      }
+      return f;
+    });
+  };
 
   // Load from localStorage or Supabase on mount
   useEffect(() => {
     try {
-      const savedTheme = localStorage.getItem(STORAGE_KEYS.THEME) as 'light' | 'dark' | null;
-      if (savedTheme) {
-        setTheme(savedTheme);
-        if (savedTheme === 'dark') {
-          document.documentElement.classList.add('dark');
-        } else {
-          document.documentElement.classList.remove('dark');
-        }
-      }
+      // Force dark theme as requested
+      setTheme('dark');
+      document.documentElement.classList.add('dark');
+      localStorage.setItem(STORAGE_KEYS.THEME, 'dark');
 
       const client = supabase;
       if (isSupabaseConfigured && client) {
@@ -106,7 +118,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
               client.from('settings').select('*').limit(1).maybeSingle(),
             ]);
 
-            if (famRes.data && famRes.data.length > 0) setFamilies(famRes.data);
+            if (famRes.data && famRes.data.length > 0) {
+              const clean = sanitizeFamilies(famRes.data);
+              setFamilies(clean);
+              localStorage.setItem(STORAGE_KEYS.FAMILIES, JSON.stringify(clean));
+            }
             if (payRes.data && payRes.data.length > 0) setPayments(payRes.data);
             if (setRes.data) setSettings(setRes.data);
           } catch (e) {
@@ -115,13 +131,21 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         };
         fetchRemote();
       } else {
-        // Fallback to localStorage
+        // Fallback to localStorage with sanitization
         const storedFam = localStorage.getItem(STORAGE_KEYS.FAMILIES);
         const storedPay = localStorage.getItem(STORAGE_KEYS.PAYMENTS);
         const storedSet = localStorage.getItem(STORAGE_KEYS.SETTINGS);
         const storedLogs = localStorage.getItem(STORAGE_KEYS.SMS_LOGS);
 
-        if (storedFam) setFamilies(JSON.parse(storedFam));
+        if (storedFam) {
+          const clean = sanitizeFamilies(JSON.parse(storedFam));
+          setFamilies(clean);
+          localStorage.setItem(STORAGE_KEYS.FAMILIES, JSON.stringify(clean));
+        } else {
+          const clean = sanitizeFamilies(INITIAL_FAMILIES);
+          setFamilies(clean);
+          localStorage.setItem(STORAGE_KEYS.FAMILIES, JSON.stringify(clean));
+        }
         if (storedPay) setPayments(JSON.parse(storedPay));
         if (storedSet) setSettings(JSON.parse(storedSet));
         if (storedLogs) setSmsLogs(JSON.parse(storedLogs));

@@ -22,8 +22,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.className} suppressHydrationWarning>
-      <body className="min-h-screen bg-slate-50 dark:bg-[#090d16] text-slate-900 dark:text-slate-100 flex flex-col md:flex-row antialiased transition-colors duration-150">
+    <html lang="en" className={`${inter.className} dark`} suppressHydrationWarning>
+      <body className="min-h-screen bg-[#090d16] text-slate-100 dark:bg-[#090d16] dark:text-slate-100 flex flex-col md:flex-row antialiased transition-colors duration-150">
         <AppProvider>
           {/* Navigation handles desktop sidebar + mobile headers/bottom bar */}
           <Navigation />
