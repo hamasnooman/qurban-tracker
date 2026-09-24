@@ -66,7 +66,16 @@ export const INITIAL_SETTINGS: AppSettings = {
     'Assalamu Alaikum. Qurban Fund - {FAMILY}.\nAlhamdulillah, your contributions are up to date! Total paid: {PAID}.\nMay Allah accept our Qurban. JazakAllah khair.',
 };
 
+export const DEFAULT_VIEWER: UserProfile = {
+  id: 'user-public-viewer',
+  email: 'viewer@qurban.local',
+  name: 'Family View (Complete Review)',
+  role: 'family',
+  family_id: null,
+};
+
 export const INITIAL_USERS: UserProfile[] = [
+  DEFAULT_VIEWER,
   {
     id: 'user-admin-hamas',
     email: 'hamas@qurban.local',

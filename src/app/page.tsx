@@ -1,11 +1,12 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useApp } from '@/context/AppContext';
 import { StatCard } from '@/components/StatCard';
 import { FamilyCard } from '@/components/FamilyCard';
 import { Charts } from '@/components/Charts';
+import { AdminLoginModal } from '@/components/AdminLoginModal';
 import {
   formatCurrency,
   formatDisplayDate,
@@ -17,6 +18,7 @@ import {
   PlusCircle,
   Share2,
   ArrowRight,
+  KeyRound,
 } from 'lucide-react';
 
 export default function DashboardPage() {
@@ -28,6 +30,9 @@ export default function DashboardPage() {
     currentUser,
     isInitialized,
   } = useApp();
+
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const isAdminOrSub = currentUser.role === 'main_admin' || currentUser.role === 'sub_admin';
 
   if (!isInitialized) {
     return (
@@ -78,10 +83,16 @@ export default function DashboardPage() {
       {/* Clean, Simple Header Banner */}
       <div className="rounded-2xl bg-gradient-to-r from-emerald-800 to-emerald-950 text-white p-5 sm:p-6 shadow-sm border border-emerald-700/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-amber-300">
+          <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-amber-300">
             <span>🌙 Week {currentWeek} of {settings.total_weeks}</span>
             <span>·</span>
             <span>4 Families</span>
+            <span className="hidden sm:inline">·</span>
+            <span className="inline-block px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] font-semibold bg-emerald-700/60 text-emerald-200 border border-emerald-600/50">
+              {isAdminOrSub
+                ? `${currentUser.name}`
+                : 'Complete Review Summary (User View)'}
+            </span>
           </div>
           <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight mt-1 text-white">
             {settings.fund_name}
@@ -91,8 +102,8 @@ export default function DashboardPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2 self-start sm:self-auto">
-          {(currentUser.role === 'main_admin' || currentUser.role === 'sub_admin') && (
+        <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+          {isAdminOrSub ? (
             <Link
               href="/payments/add"
               className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs shadow-xs transition-all active:scale-95"
@@ -100,7 +111,17 @@ export default function DashboardPage() {
               <PlusCircle className="w-4 h-4" />
               <span>Add Payment</span>
             </Link>
+          ) : (
+            <button
+              onClick={() => setLoginModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white border border-white/25 text-xs font-bold transition-all active:scale-95"
+              title="Sign In as Mr. Hamas or Nihla to enter payments"
+            >
+              <KeyRound className="w-4 h-4 text-amber-300" />
+              <span>Admin Sign In</span>
+            </button>
           )}
+
           <Link
             href="/weekly-card"
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs font-semibold transition-all active:scale-95"
@@ -110,6 +131,11 @@ export default function DashboardPage() {
           </Link>
         </div>
       </div>
+
+      <AdminLoginModal
+        isOpen={loginModalOpen}
+        onClose={() => setLoginModalOpen(false)}
+      />
 
       {/* Clean alert mark only for outstanding (NOT full red) */}
       {behindFamilies.length > 0 && (

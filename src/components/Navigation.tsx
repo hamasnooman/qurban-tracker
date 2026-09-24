@@ -21,13 +21,16 @@ import {
   Sparkles,
   Menu,
   X,
+  KeyRound,
+  LogOut,
 } from 'lucide-react';
+import { AdminLoginModal } from './AdminLoginModal';
 
 export function Navigation() {
   const pathname = usePathname();
-  const { currentUser, switchUser, users, theme, toggleTheme, isSupabase } = useApp();
-  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const { currentUser, logoutToUserView, theme, toggleTheme, isSupabase } = useApp();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
   const isAdminOrSub = currentUser.role === 'main_admin' || currentUser.role === 'sub_admin';
 
   const navItems = [
@@ -58,9 +61,9 @@ export function Navigation() {
         );
       default:
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300">
-            <User className="w-3 h-3 text-blue-600" />
-            Family View
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-stone-100 text-stone-700 dark:bg-stone-800 dark:text-stone-300">
+            <User className="w-3 h-3 text-stone-500" />
+            User View
           </span>
         );
     }
@@ -140,46 +143,43 @@ export function Navigation() {
 
         {/* Footer User Info & Controls */}
         <div className="p-3 border-t border-stone-200 dark:border-stone-800 bg-stone-50/60 dark:bg-stone-900/60 space-y-3">
-          {/* User selector dropdown */}
-          <div className="relative">
-            <button
-              onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-              className="w-full flex items-center justify-between p-2 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 hover:border-emerald-500 transition-colors text-left"
-            >
-              <div className="flex flex-col truncate pr-2">
-                <span className="text-xs font-semibold text-stone-800 dark:text-stone-200 truncate">
+          {/* User Status / Admin Sign In */}
+          {isAdminOrSub ? (
+            <div className="p-2.5 rounded-xl bg-white dark:bg-stone-800 border border-emerald-300 dark:border-emerald-800/60 space-y-2 shadow-xs">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-stone-900 dark:text-white truncate">
                   {currentUser.name}
                 </span>
-                <div className="mt-0.5">{getRoleBadge(currentUser.role)}</div>
+                {getRoleBadge(currentUser.role)}
               </div>
-              <ChevronDown className="w-4 h-4 text-stone-400 shrink-0" />
-            </button>
-
-            {userDropdownOpen && (
-              <div className="absolute bottom-full left-0 right-0 mb-1 bg-white dark:bg-stone-800 rounded-lg shadow-xl border border-stone-200 dark:border-stone-700 p-1.5 z-50 space-y-1">
-                <div className="px-2 py-1 text-[11px] font-bold text-stone-400 tracking-wider uppercase">
-                  Switch Active Role
-                </div>
-                {users.map((u) => (
-                  <button
-                    key={u.id}
-                    onClick={() => {
-                      switchUser(u);
-                      setUserDropdownOpen(false);
-                    }}
-                    className={`w-full text-left px-2.5 py-1.5 rounded text-xs flex items-center justify-between transition-colors ${
-                      u.id === currentUser.id
-                        ? 'bg-emerald-50 text-emerald-900 font-bold dark:bg-emerald-950/70 dark:text-emerald-200'
-                        : 'text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-700'
-                    }`}
-                  >
-                    <span className="truncate">{u.name}</span>
-                    <span className="text-[10px] text-stone-400">{u.role.replace('_', ' ')}</span>
-                  </button>
-                ))}
+              <button
+                onClick={logoutToUserView}
+                className="w-full py-1.5 px-2.5 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-700 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
+                title="Return to User View (Read Only)"
+              >
+                <LogOut className="w-3.5 h-3.5 text-stone-400" />
+                <span>Exit to User View</span>
+              </button>
+            </div>
+          ) : (
+            <div className="p-2.5 rounded-xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 space-y-2 shadow-xs">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-stone-700 dark:text-stone-300">
+                  User View
+                </span>
+                <span className="text-[10px] font-semibold text-stone-400">
+                  Complete Review
+                </span>
               </div>
-            )}
-          </div>
+              <button
+                onClick={() => setLoginModalOpen(true)}
+                className="w-full py-2 px-3 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-xs flex items-center justify-center gap-1.5 transition-all active:scale-95"
+              >
+                <KeyRound className="w-3.5 h-3.5 text-amber-300" />
+                <span>Admin Sign In</span>
+              </button>
+            </div>
+          )}
 
           {/* Theme Toggle & Meta */}
           <div className="flex items-center justify-between pt-1 text-xs text-stone-500 dark:text-stone-400">
@@ -206,24 +206,45 @@ export function Navigation() {
       </aside>
 
       {/* ================= MOBILE HEADER ================= */}
-      <header className="md:hidden sticky top-0 z-30 bg-white/95 dark:bg-stone-900/95 backdrop-blur border-b border-stone-200 dark:border-stone-800 px-4 py-3 flex items-center justify-between">
+      <header className="md:hidden sticky top-0 z-30 bg-white/95 dark:bg-stone-900/95 backdrop-blur border-b border-stone-200 dark:border-stone-800 px-3.5 py-2.5 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-emerald-700 text-amber-300 flex items-center justify-center text-sm shadow">
             🌙
           </div>
           <div>
-            <div className="font-bold text-sm text-stone-900 dark:text-white flex items-center gap-1">
+            <div className="font-bold text-xs sm:text-sm text-stone-900 dark:text-white flex items-center gap-1">
               Qurban 2026/27 <span>🐄</span>
             </div>
-            <div className="text-[10px] text-stone-500">{currentUser.name}</div>
+            <div className="text-[10px] text-stone-500 font-medium truncate max-w-[130px]">
+              {isAdminOrSub ? currentUser.name : 'Complete Review Summary'}
+            </div>
           </div>
         </Link>
 
-        <div className="flex items-center gap-2">
-          {getRoleBadge(currentUser.role)}
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          {isAdminOrSub ? (
+            <button
+              onClick={logoutToUserView}
+              className="px-2 py-1 rounded-lg border border-stone-200 dark:border-stone-700 text-[11px] font-bold text-stone-600 dark:text-stone-300 hover:bg-stone-100 flex items-center gap-1"
+              title="Exit to User View"
+            >
+              <LogOut className="w-3 h-3 text-stone-400" />
+              <span>Exit</span>
+            </button>
+          ) : (
+            <button
+              onClick={() => setLoginModalOpen(true)}
+              className="px-2.5 py-1 rounded-lg bg-emerald-700 text-white font-bold text-[11px] shadow-xs flex items-center gap-1 active:scale-95"
+            >
+              <KeyRound className="w-3 h-3 text-amber-300" />
+              <span>Sign In</span>
+            </button>
+          )}
+
           <button
             onClick={toggleTheme}
             className="p-1.5 rounded-lg text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+            title="Toggle theme"
           >
             {theme === 'dark' ? (
               <Sun className="w-4 h-4 text-amber-400" />
@@ -269,28 +290,40 @@ export function Navigation() {
                 ))}
               </div>
 
-              {/* Role Switcher in Mobile Drawer */}
+              {/* Admin Portal in Mobile Drawer */}
               <div className="pt-3 border-t border-stone-200 dark:border-stone-800">
-                <div className="text-xs font-semibold text-stone-500 mb-2">Switch Active User</div>
-                <div className="space-y-1">
-                  {users.map((u) => (
+                <div className="text-xs font-semibold text-stone-500 mb-2">Admin Portal</div>
+                {isAdminOrSub ? (
+                  <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 space-y-2">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-bold text-emerald-900 dark:text-emerald-200 truncate pr-2">
+                        {currentUser.name}
+                      </span>
+                      {getRoleBadge(currentUser.role)}
+                    </div>
                     <button
-                      key={u.id}
                       onClick={() => {
-                        switchUser(u);
+                        logoutToUserView();
                         setMobileMenuOpen(false);
                       }}
-                      className={`w-full text-left px-3 py-2 rounded-lg text-xs flex items-center justify-between ${
-                        u.id === currentUser.id
-                          ? 'bg-emerald-100 text-emerald-900 font-bold dark:bg-emerald-950 dark:text-emerald-300'
-                          : 'text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800'
-                      }`}
+                      className="w-full py-2 px-3 rounded-lg bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-200 text-xs font-semibold flex items-center justify-center gap-1.5"
                     >
-                      <span>{u.name}</span>
-                      <span>{u.role.replace('_', ' ')}</span>
+                      <LogOut className="w-3.5 h-3.5 text-stone-400" />
+                      <span>Exit to User View (Read Only)</span>
                     </button>
-                  ))}
-                </div>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      setLoginModalOpen(true);
+                    }}
+                    className="w-full py-2.5 px-3 rounded-xl bg-emerald-700 text-white font-bold text-xs shadow-xs flex items-center justify-center gap-1.5 active:scale-95"
+                  >
+                    <KeyRound className="w-3.5 h-3.5 text-amber-300" />
+                    <span>Sign In as Admin / Sub Admin</span>
+                  </button>
+                )}
               </div>
             </div>
 
@@ -300,6 +333,12 @@ export function Navigation() {
           </div>
         </div>
       )}
+
+      {/* Admin Login Modal */}
+      <AdminLoginModal
+        isOpen={loginModalOpen}
+        onClose={() => setLoginModalOpen(false)}
+      />
 
       {/* ================= MOBILE BOTTOM NAVIGATION ================= */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/95 dark:bg-stone-900/95 backdrop-blur border-t border-stone-200 dark:border-stone-800 px-2 py-1.5 flex items-center justify-around shadow-lg">

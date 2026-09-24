@@ -14,6 +14,7 @@ import {
   INITIAL_PAYMENTS,
   INITIAL_SETTINGS,
   INITIAL_USERS,
+  DEFAULT_VIEWER,
 } from '@/lib/mock-data';
 import {
   calculateAllFamiliesStatus,
@@ -37,6 +38,11 @@ interface AppContextType {
   financialStatuses: FamilyFinancialStatus[];
   toggleTheme: () => void;
   switchUser: (user: UserProfile) => void;
+  loginAsAdmin: (
+    adminType: 'main_admin' | 'sub_admin',
+    pin?: string
+  ) => { success: boolean; error?: string };
+  logoutToUserView: () => void;
   addPayment: (
     data: Omit<Payment, 'id' | 'created_at'>
   ) => Promise<{ success: boolean; error?: string; payment?: Payment }>;
@@ -71,7 +77,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [payments, setPayments] = useState<Payment[]>(INITIAL_PAYMENTS);
   const [settings, setSettings] = useState<AppSettings>(INITIAL_SETTINGS);
   const [users, setUsers] = useState<UserProfile[]>(INITIAL_USERS);
-  const [currentUser, setCurrentUser] = useState<UserProfile>(INITIAL_USERS[0]);
+  const [currentUser, setCurrentUser] = useState<UserProfile>(DEFAULT_VIEWER);
   const [smsLogs, setSmsLogs] = useState<SMSLog[]>([]);
   const [isInitialized, setIsInitialized] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
@@ -113,18 +119,31 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         const storedFam = localStorage.getItem(STORAGE_KEYS.FAMILIES);
         const storedPay = localStorage.getItem(STORAGE_KEYS.PAYMENTS);
         const storedSet = localStorage.getItem(STORAGE_KEYS.SETTINGS);
-        const storedUser = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
         const storedLogs = localStorage.getItem(STORAGE_KEYS.SMS_LOGS);
 
         if (storedFam) setFamilies(JSON.parse(storedFam));
         if (storedPay) setPayments(JSON.parse(storedPay));
         if (storedSet) setSettings(JSON.parse(storedSet));
         if (storedLogs) setSmsLogs(JSON.parse(storedLogs));
-        if (storedUser) {
+      }
+
+      // Check for saved admin session in localStorage
+      const storedUser = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
+      if (storedUser) {
+        try {
           const parsed = JSON.parse(storedUser);
-          const matched = INITIAL_USERS.find((u) => u.id === parsed.id) || parsed;
-          setCurrentUser(matched);
+          if (parsed.role === 'main_admin' || parsed.role === 'sub_admin') {
+            const matched = INITIAL_USERS.find((u) => u.id === parsed.id) || parsed;
+            setCurrentUser(matched);
+          } else {
+            setCurrentUser(DEFAULT_VIEWER);
+          }
+        } catch {
+          setCurrentUser(DEFAULT_VIEWER);
         }
+      } else {
+        // Direct click always lands on User View
+        setCurrentUser(DEFAULT_VIEWER);
       }
     } catch (err) {
       console.error('Initialization error:', err);
@@ -163,12 +182,37 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(user));
   };
 
+  const loginAsAdmin = (
+    adminType: 'main_admin' | 'sub_admin',
+    pin?: string
+  ): { success: boolean; error?: string } => {
+    const validPins = ['2027', '1234'];
+    const enteredPin = (pin || '').trim();
+    if (enteredPin && !validPins.includes(enteredPin)) {
+      return { success: false, error: 'Incorrect security PIN. Please enter PIN: 2027' };
+    }
+
+    const targetUser = INITIAL_USERS.find((u) => u.role === adminType);
+    if (!targetUser) {
+      return { success: false, error: 'Admin profile not found.' };
+    }
+
+    setCurrentUser(targetUser);
+    localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(targetUser));
+    return { success: true };
+  };
+
+  const logoutToUserView = () => {
+    setCurrentUser(DEFAULT_VIEWER);
+    localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(DEFAULT_VIEWER));
+  };
+
   const resetToSeedData = () => {
     setFamilies(INITIAL_FAMILIES);
     setPayments(INITIAL_PAYMENTS);
     setSettings(INITIAL_SETTINGS);
     setUsers(INITIAL_USERS);
-    setCurrentUser(INITIAL_USERS[0]);
+    setCurrentUser(DEFAULT_VIEWER);
     setSmsLogs([]);
     localStorage.removeItem(STORAGE_KEYS.FAMILIES);
     localStorage.removeItem(STORAGE_KEYS.PAYMENTS);
@@ -468,6 +512,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         financialStatuses,
         toggleTheme,
         switchUser,
+        loginAsAdmin,
+        logoutToUserView,
         addPayment,
         updatePayment,
         deletePayment,
