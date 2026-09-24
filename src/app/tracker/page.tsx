@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
+import Link from 'next/link';
 import { useApp } from '@/context/AppContext';
 import { calculateWeeklyGrid, formatCurrency, getWeeksDue } from '@/lib/calculations';
 import {
@@ -75,6 +76,12 @@ export default function WeeklyTrackerPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 dark:text-emerald-400 hover:underline mb-1"
+          >
+            ← Back to Summary & Accounts
+          </Link>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 dark:text-white tracking-tight flex items-center gap-2">
             <CalendarDays className="w-7 h-7 text-emerald-700 dark:text-emerald-400" />
             <span>Weekly Savings Grid (51 Weeks)</span>

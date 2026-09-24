@@ -35,6 +35,13 @@ export interface Payment {
   updated_at?: string;
 }
 
+export interface BankAccount {
+  bank_name: string;
+  account_number: string;
+  account_name: string;
+  branch: string;
+}
+
 export interface BankDetails {
   account_name: string;
   bank_name: string;
@@ -53,6 +60,7 @@ export interface AppSettings {
   timezone: string; // Asia/Colombo
   footer_text: string; // "Jazakallahu Khairan 🤲 · #QurbanFamily2027"
   bank_details: BankDetails;
+  bank_accounts?: BankAccount[];
   sms_enabled: boolean;
   sms_template_due: string;
   sms_template_paid: string;

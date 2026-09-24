@@ -34,13 +34,9 @@ export function Navigation() {
   const isAdminOrSub = currentUser.role === 'main_admin' || currentUser.role === 'sub_admin';
 
   const navItems = [
-    { href: '/', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/tracker', label: 'Weekly Tracker', icon: CalendarDays },
-    ...(isAdminOrSub ? [{ href: '/payments/add', label: 'Add Payment', icon: PlusCircle, highlight: true }] : []),
-    { href: '/payments', label: 'All Payments', icon: Receipt },
-    { href: '/weekly-card', label: 'Weekly Card', icon: Share2 },
-    { href: `/family/${currentUser.family_id || 'fam-hamas'}`, label: 'Family Statement', icon: Users },
-    ...(currentUser.role === 'main_admin' ? [{ href: '/settings', label: 'Settings', icon: Settings, adminOnly: true }] : []),
+    { href: '/', label: 'Summary & Accounts', icon: LayoutDashboard },
+    { href: '/tracker', label: '51-Week Grid', icon: CalendarDays },
+    ...(isAdminOrSub ? [{ href: '/payments/add', label: '+ Add Payment', icon: PlusCircle, highlight: true }] : []),
   ];
 
   const getRoleBadge = (role: string) => {
@@ -341,36 +337,24 @@ export function Navigation() {
       />
 
       {/* ================= MOBILE BOTTOM NAVIGATION ================= */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/95 dark:bg-stone-900/95 backdrop-blur border-t border-stone-200 dark:border-stone-800 px-2 py-1.5 flex items-center justify-around shadow-lg">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/95 dark:bg-stone-900/95 backdrop-blur border-t border-stone-200 dark:border-stone-800 px-6 py-2 flex items-center justify-around shadow-lg">
         <Link
           href="/"
-          className={`flex flex-col items-center py-1 px-3 rounded-lg text-xs font-medium transition-colors ${
+          className={`flex flex-col items-center py-1 px-4 rounded-xl text-xs font-medium transition-colors ${
             pathname === '/'
               ? 'text-emerald-700 dark:text-emerald-400 font-bold'
               : 'text-stone-500 dark:text-stone-400'
           }`}
         >
           <LayoutDashboard className="w-5 h-5 mb-0.5" />
-          <span>Home</span>
-        </Link>
-
-        <Link
-          href="/tracker"
-          className={`flex flex-col items-center py-1 px-3 rounded-lg text-xs font-medium transition-colors ${
-            pathname === '/tracker'
-              ? 'text-emerald-700 dark:text-emerald-400 font-bold'
-              : 'text-stone-500 dark:text-stone-400'
-          }`}
-        >
-          <CalendarDays className="w-5 h-5 mb-0.5" />
-          <span>Tracker</span>
+          <span>Summary</span>
         </Link>
 
         {/* Center Prominent Add Button: ONLY for Main Admin (Mr. Hamas) and Sub Admin (Nihla) */}
         {isAdminOrSub && (
           <Link
             href="/payments/add"
-            className="flex flex-col items-center -mt-5"
+            className="flex flex-col items-center -mt-6"
             title="Add Payment"
           >
             <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-emerald-600 to-emerald-800 text-white flex items-center justify-center shadow-lg shadow-emerald-700/40 hover:scale-105 active:scale-95 transition-transform">
@@ -383,27 +367,15 @@ export function Navigation() {
         )}
 
         <Link
-          href="/weekly-card"
-          className={`flex flex-col items-center py-1 px-3 rounded-lg text-xs font-medium transition-colors ${
-            pathname === '/weekly-card'
+          href="/tracker"
+          className={`flex flex-col items-center py-1 px-4 rounded-xl text-xs font-medium transition-colors ${
+            pathname === '/tracker'
               ? 'text-emerald-700 dark:text-emerald-400 font-bold'
               : 'text-stone-500 dark:text-stone-400'
           }`}
         >
-          <Share2 className="w-5 h-5 mb-0.5" />
-          <span>Card</span>
-        </Link>
-
-        <Link
-          href="/payments"
-          className={`flex flex-col items-center py-1 px-3 rounded-lg text-xs font-medium transition-colors ${
-            pathname.startsWith('/payments') && pathname !== '/payments/add'
-              ? 'text-emerald-700 dark:text-emerald-400 font-bold'
-              : 'text-stone-500 dark:text-stone-400'
-          }`}
-        >
-          <Receipt className="w-5 h-5 mb-0.5" />
-          <span>Payments</span>
+          <CalendarDays className="w-5 h-5 mb-0.5" />
+          <span>51-Week Grid</span>
         </Link>
       </nav>
     </>

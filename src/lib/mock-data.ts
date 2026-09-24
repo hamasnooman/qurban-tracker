@@ -43,6 +43,27 @@ export const INITIAL_FAMILIES: Family[] = [
   },
 ];
 
+export const HAMAS_BANK_ACCOUNTS = [
+  {
+    bank_name: 'Commercial Bank',
+    account_number: '8016292617',
+    account_name: 'M N Hamas',
+    branch: '101 - Nawala Branch',
+  },
+  {
+    bank_name: 'Amana Bank',
+    account_number: '0110578227001',
+    account_name: 'MN Hamas',
+    branch: 'Kurunegala',
+  },
+  {
+    bank_name: 'BOC (An-Noor)',
+    account_number: '96503121',
+    account_name: 'MN Hamas',
+    branch: 'Galgamuwa',
+  },
+];
+
 export const INITIAL_SETTINGS: AppSettings = {
   fund_name: 'Qurban Family Savings Tracker 2026/27',
   weekly_amount: 1500,
@@ -54,14 +75,15 @@ export const INITIAL_SETTINGS: AppSettings = {
   timezone: 'Asia/Colombo',
   footer_text: 'Jazakallahu Khairan 🤲 · #QurbanFamily2027',
   bank_details: {
-    account_name: 'M. Nooman (Qurban Fund)',
-    bank_name: 'Bank of Ceylon (BOC)',
-    account_number: '8910234567',
-    branch: 'Colombo Central',
+    account_name: 'M N Hamas',
+    bank_name: 'Commercial Bank',
+    account_number: '8016292617',
+    branch: '101 - Nawala Branch',
   },
+  bank_accounts: HAMAS_BANK_ACCOUNTS,
   sms_enabled: true,
   sms_template_due:
-    'Assalamu Alaikum. Qurban Fund - {FAMILY}.\nPaid: {PAID}. Due now: {DUE}.\nPay to: {NAME}, {BANK}, A/C {ACCOUNT}. JazakAllah khair.',
+    'Assalamu Alaikum. Qurban Fund - {FAMILY}.\nPaid: {PAID}. Due now: {DUE}.\nPay to: M N Hamas, Commercial Bank A/C 8016292617 (Nawala) / Amana 0110578227001. JazakAllah khair.',
   sms_template_paid:
     'Assalamu Alaikum. Qurban Fund - {FAMILY}.\nAlhamdulillah, your contributions are up to date! Total paid: {PAID}.\nMay Allah accept our Qurban. JazakAllah khair.',
 };
