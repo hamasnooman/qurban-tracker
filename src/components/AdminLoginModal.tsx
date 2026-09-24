@@ -22,9 +22,13 @@ export function AdminLoginModal({ isOpen, onClose }: AdminLoginModalProps) {
     e.preventDefault();
     setError(null);
 
-    // If pin is empty, default to '2027' for convenience, or check entered pin
-    const pinToSubmit = pin.trim() === '' ? '2027' : pin.trim();
-    const result = loginAsAdmin(selectedRole, pinToSubmit);
+    const enteredPassword = pin.trim();
+    if (!enteredPassword) {
+      setError('Password is required.');
+      return;
+    }
+
+    const result = loginAsAdmin(selectedRole, enteredPassword);
 
     if (result.success) {
       setSuccess(
@@ -146,20 +150,17 @@ export function AdminLoginModal({ isOpen, onClose }: AdminLoginModalProps) {
             </div>
           </div>
 
-          {/* PIN Input */}
+          {/* Password Input */}
           <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                Security PIN Code
-              </label>
-              <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">PIN: 2027</span>
-            </div>
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              Admin Password
+            </label>
             <input
               type="password"
-              maxLength={6}
               value={pin}
               onChange={(e) => setPin(e.target.value)}
-              placeholder="Enter PIN (e.g. 2027)"
+              placeholder="Enter password"
+              required
               autoFocus
               className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-mono tracking-widest text-center text-base focus:outline-hidden focus:ring-2 focus:ring-emerald-600"
             />

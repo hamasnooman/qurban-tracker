@@ -210,10 +210,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     adminType: 'main_admin' | 'sub_admin',
     pin?: string
   ): { success: boolean; error?: string } => {
-    const validPins = ['2027', '1234'];
     const enteredPin = (pin || '').trim();
-    if (enteredPin && !validPins.includes(enteredPin)) {
-      return { success: false, error: 'Incorrect security PIN. Please enter PIN: 2027' };
+    if (!enteredPin) {
+      return { success: false, error: 'Password is required.' };
+    }
+
+    const adminSecret = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || '2027';
+    if (enteredPin !== adminSecret) {
+      return { success: false, error: 'Incorrect password. Access denied.' };
     }
 
     const targetUser = INITIAL_USERS.find((u) => u.role === adminType);

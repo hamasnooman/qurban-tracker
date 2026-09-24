@@ -47,8 +47,8 @@ A clean, mobile-friendly web application to manage a 4-family Qurban savings fun
    ```
 6. In Supabase, go to **Project Settings → API** and copy:
    - **Project URL** (`NEXT_PUBLIC_SUPABASE_URL`)
-   - **anon / public key** (`NEXT_PUBLIC_SUPABASE_ANON_KEY`)
-   - **service_role key** (`SUPABASE_SERVICE_ROLE_KEY`)
+   - **anon / public key** (`NEXT_PUBLIC_SUPABASE_ANON_KEY`) 
+   - **service_role key** (`SUPABASE_SERVICE_ROLE_KEY`) 
 
 ---
 
@@ -57,8 +57,8 @@ A clean, mobile-friendly web application to manage a 4-family Qurban savings fun
 1. Sign up at [notify.lk](https://notify.lk).
 2. Go to **Settings** or **API Keys** on your Notify.lk dashboard.
 3. Note your:
-   - **User ID** (`NOTIFYLK_USER_ID`)
-   - **API Key** (`NOTIFYLK_API_KEY`)
+   - **User ID** (`NOTIFYLK_USER_ID`) 
+   - **API Key** (`NOTIFYLK_API_KEY`) 
    - **Sender ID** (`NOTIFYLK_SENDER_ID`) — Use `NotifyDEMO` for initial testing until your custom sender ID is approved.
 
 > *Note: If you run the app without Notify.lk credentials, the app operates in simulation mode, logging SMS messages safely to the delivery log without errors.*
