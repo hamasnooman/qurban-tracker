@@ -42,23 +42,23 @@ export function AdminLoginModal({ isOpen, onClose }: AdminLoginModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-stone-900 rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-stone-200 dark:border-stone-800 space-y-4 animate-in fade-in zoom-in-95 duration-200">
+      <div className="bg-white dark:bg-[#111622] rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4 animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-stone-100 dark:border-stone-800">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 flex items-center justify-center text-sm font-bold">
               <KeyRound className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="font-extrabold text-sm text-stone-900 dark:text-white">
+              <h3 className="font-extrabold text-sm text-slate-900 dark:text-white">
                 Admin Sign In
               </h3>
-              <p className="text-[11px] text-stone-400">Unlock data entry & editing</p>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">Unlock data entry & editing</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-stone-400 hover:text-stone-600 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+            className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -83,7 +83,7 @@ export function AdminLoginModal({ isOpen, onClose }: AdminLoginModalProps) {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Select User */}
           <div className="space-y-2">
-            <label className="block text-[11px] font-bold uppercase tracking-wider text-stone-400">
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Sign In As:
             </label>
 
@@ -94,7 +94,7 @@ export function AdminLoginModal({ isOpen, onClose }: AdminLoginModalProps) {
                 className={`p-3 rounded-2xl border text-left flex items-center justify-between transition-all ${
                   selectedRole === 'main_admin'
                     ? 'border-emerald-600 bg-emerald-50/80 dark:bg-emerald-950/40 ring-2 ring-emerald-500/20'
-                    : 'border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800/60 hover:bg-stone-100'
+                    : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100'
                 }`}
               >
                 <div className="flex items-center gap-2.5">
@@ -102,13 +102,13 @@ export function AdminLoginModal({ isOpen, onClose }: AdminLoginModalProps) {
                     MH
                   </div>
                   <div>
-                    <div className="font-bold text-xs text-stone-900 dark:text-white flex items-center gap-1.5">
+                    <div className="font-bold text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
                       <span>Mr. Hamas</span>
                       <span className="px-1.5 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200 font-bold">
                         Main Admin
                       </span>
                     </div>
-                    <div className="text-[10px] text-stone-500">Full control & data entry</div>
+                    <div className="text-[10px] text-slate-500 dark:text-slate-400">Full control & data entry</div>
                   </div>
                 </div>
                 {selectedRole === 'main_admin' && (
@@ -122,7 +122,7 @@ export function AdminLoginModal({ isOpen, onClose }: AdminLoginModalProps) {
                 className={`p-3 rounded-2xl border text-left flex items-center justify-between transition-all ${
                   selectedRole === 'sub_admin'
                     ? 'border-amber-600 bg-amber-50/80 dark:bg-amber-950/40 ring-2 ring-amber-500/20'
-                    : 'border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800/60 hover:bg-stone-100'
+                    : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100'
                 }`}
               >
                 <div className="flex items-center gap-2.5">
@@ -130,13 +130,13 @@ export function AdminLoginModal({ isOpen, onClose }: AdminLoginModalProps) {
                     N
                   </div>
                   <div>
-                    <div className="font-bold text-xs text-stone-900 dark:text-white flex items-center gap-1.5">
+                    <div className="font-bold text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
                       <span>Nihla</span>
                       <span className="px-1.5 py-0.5 rounded text-[10px] bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200 font-bold">
                         Sub Admin
                       </span>
                     </div>
-                    <div className="text-[10px] text-stone-500">Authorized data entry</div>
+                    <div className="text-[10px] text-slate-500 dark:text-slate-400">Authorized data entry</div>
                   </div>
                 </div>
                 {selectedRole === 'sub_admin' && (
@@ -149,10 +149,10 @@ export function AdminLoginModal({ isOpen, onClose }: AdminLoginModalProps) {
           {/* PIN Input */}
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
-              <label className="block text-[11px] font-bold uppercase tracking-wider text-stone-400">
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                 Security PIN Code
               </label>
-              <span className="text-[10px] text-stone-400 font-mono">PIN: 2027</span>
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">PIN: 2027</span>
             </div>
             <input
               type="password"
@@ -161,7 +161,7 @@ export function AdminLoginModal({ isOpen, onClose }: AdminLoginModalProps) {
               onChange={(e) => setPin(e.target.value)}
               placeholder="Enter PIN (e.g. 2027)"
               autoFocus
-              className="w-full p-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white font-mono tracking-widest text-center text-base focus:outline-hidden focus:ring-2 focus:ring-emerald-600"
+              className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-mono tracking-widest text-center text-base focus:outline-hidden focus:ring-2 focus:ring-emerald-600"
             />
           </div>
 
@@ -170,7 +170,7 @@ export function AdminLoginModal({ isOpen, onClose }: AdminLoginModalProps) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2.5 rounded-xl border border-stone-200 dark:border-stone-700 text-xs font-semibold text-stone-600 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 transition-colors"
+              className="flex-1 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
             >
               Cancel
             </button>

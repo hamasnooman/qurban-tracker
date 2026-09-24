@@ -119,21 +119,21 @@ function AddPaymentForm() {
         <div className="flex items-center gap-3">
           <Link
             href="/"
-            className="p-2 rounded-xl border border-stone-200 dark:border-stone-800 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-300 transition-colors"
+            className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
           </Link>
           <div>
-            <h1 className="text-xl sm:text-2xl font-extrabold text-stone-900 dark:text-white">
+            <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
               Record New Payment
             </h1>
-            <p className="text-xs text-stone-500 dark:text-stone-400">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
               Contribution will be allocated chronologically to oldest unpaid week
             </p>
           </div>
         </div>
-        <div className="text-xs text-stone-400">
-          Entering as: <strong className="text-stone-700 dark:text-stone-200">{currentUser.name}</strong>
+        <div className="text-xs text-slate-400">
+          Entering as: <strong className="text-slate-800 dark:text-slate-200">{currentUser.name}</strong>
         </div>
       </div>
 
@@ -169,18 +169,18 @@ function AddPaymentForm() {
       {/* Form Card */}
       <form
         onSubmit={handleSubmit}
-        className="bg-white dark:bg-stone-900 rounded-3xl p-6 border border-stone-200 dark:border-stone-800 shadow-sm space-y-5"
+        className="bg-white dark:bg-[#111622] rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-5"
       >
         {/* 1. Family Selector */}
         <div className="space-y-1.5">
-          <label className="block text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400">
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
             Select Family *
           </label>
           <select
             value={familyId}
             onChange={(e) => setFamilyId(e.target.value)}
             disabled={isReadOnly}
-            className="w-full p-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white font-medium text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-600"
+            className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-medium text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-600"
           >
             {families.map((fam) => (
               <option key={fam.id} value={fam.id}>
@@ -192,7 +192,7 @@ function AddPaymentForm() {
 
         {/* 2. Paid By (Husband or Wife Name) */}
         <div className="space-y-1.5">
-          <label className="block text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400">
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
             Paid By (Payer Name) *
           </label>
           <div className="flex flex-wrap gap-2 mb-2">
@@ -204,7 +204,7 @@ function AddPaymentForm() {
                   className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
                     paidBy === (selectedFamily.husband_name || selectedFamily.name)
                       ? 'bg-emerald-700 text-white shadow-xs'
-                      : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
                   }`}
                 >
                   👨 {selectedFamily.husband_name || selectedFamily.name}
@@ -216,7 +216,7 @@ function AddPaymentForm() {
                     className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
                       paidBy === selectedFamily.wife_name
                         ? 'bg-emerald-700 text-white shadow-xs'
-                        : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
                     }`}
                   >
                     🧕 {selectedFamily.wife_name}
@@ -232,17 +232,17 @@ function AddPaymentForm() {
             placeholder="Payer name"
             disabled={isReadOnly}
             required
-            className="w-full p-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-600"
+            className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-600"
           />
         </div>
 
         {/* 3. Amount & Quick Buttons */}
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
-            <label className="block text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400">
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Payment Amount (LKR) *
             </label>
-            <span className="text-xs text-stone-400">1 Week = Rs. 1,500</span>
+            <span className="text-xs text-slate-400">1 Week = Rs. 1,500</span>
           </div>
 
           {/* Quick Buttons */}
@@ -253,7 +253,7 @@ function AddPaymentForm() {
               className={`py-2.5 px-3 rounded-xl text-xs font-bold border transition-all ${
                 amount === 1500
                   ? 'bg-emerald-700 text-white border-emerald-700 shadow-xs'
-                  : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-stone-200 dark:border-stone-700 hover:border-emerald-500'
+                  : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-emerald-500'
               }`}
             >
               Rs. 1,500 <span className="font-normal block text-[10px] opacity-80">(1 Week)</span>
@@ -265,7 +265,7 @@ function AddPaymentForm() {
               className={`py-2.5 px-3 rounded-xl text-xs font-bold border transition-all ${
                 amount === 3000
                   ? 'bg-emerald-700 text-white border-emerald-700 shadow-xs'
-                  : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-stone-200 dark:border-stone-700 hover:border-emerald-500'
+                  : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-emerald-500'
               }`}
             >
               Rs. 3,000 <span className="font-normal block text-[10px] opacity-80">(2 Weeks)</span>
@@ -277,7 +277,7 @@ function AddPaymentForm() {
               className={`py-2.5 px-3 rounded-xl text-xs font-bold border transition-all ${
                 amount === 6000
                   ? 'bg-emerald-700 text-white border-emerald-700 shadow-xs'
-                  : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-stone-200 dark:border-stone-700 hover:border-emerald-500'
+                  : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-emerald-500'
               }`}
             >
               Rs. 6,000 <span className="font-normal block text-[10px] opacity-80">(4 Weeks)</span>
@@ -285,7 +285,7 @@ function AddPaymentForm() {
           </div>
 
           <div className="relative mt-2">
-            <span className="absolute left-3.5 top-3 text-stone-400 font-bold text-sm">Rs.</span>
+            <span className="absolute left-3.5 top-3 text-slate-400 font-bold text-sm">Rs.</span>
             <input
               type="number"
               value={amount || ''}
@@ -295,7 +295,7 @@ function AddPaymentForm() {
               required
               min={1}
               step="any"
-              className="w-full pl-11 pr-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white font-mono font-bold text-base focus:outline-hidden focus:ring-2 focus:ring-emerald-600"
+              className="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-mono font-bold text-base focus:outline-hidden focus:ring-2 focus:ring-emerald-600"
             />
           </div>
         </div>
@@ -307,7 +307,7 @@ function AddPaymentForm() {
             <div className="text-[11px] uppercase font-bold tracking-wider text-amber-800 dark:text-amber-300">
               Live Impact Preview
             </div>
-            <p className="text-xs font-semibold text-stone-900 dark:text-white mt-1">
+            <p className="text-xs font-semibold text-slate-900 dark:text-white mt-1">
               {previewText}
             </p>
           </div>
@@ -316,7 +316,7 @@ function AddPaymentForm() {
         {/* 5. Date & Method */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400">
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Payment Date *
             </label>
             <input
@@ -325,19 +325,19 @@ function AddPaymentForm() {
               onChange={(e) => setPaymentDate(e.target.value)}
               disabled={isReadOnly}
               required
-              className="w-full p-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-600"
+              className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-600"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400">
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Payment Method *
             </label>
             <select
               value={paymentMethod}
               onChange={(e) => setPaymentMethod(e.target.value as PaymentMethod)}
               disabled={isReadOnly}
-              className="w-full p-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white font-medium text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-600"
+              className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-medium text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-600"
             >
               <option value="Cash">Cash (Handed over)</option>
               <option value="BOC">Bank of Ceylon (BOC)</option>
@@ -351,7 +351,7 @@ function AddPaymentForm() {
         {/* 6. Reference Number & Note */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400">
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Reference # (Optional)
             </label>
             <input
@@ -360,12 +360,12 @@ function AddPaymentForm() {
               onChange={(e) => setReferenceNumber(e.target.value)}
               placeholder="e.g. TXN-89342 or Cash slip"
               disabled={isReadOnly}
-              className="w-full p-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-600"
+              className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-600"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400">
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Note (Optional)
             </label>
             <input
@@ -374,7 +374,7 @@ function AddPaymentForm() {
               onChange={(e) => setNote(e.target.value)}
               placeholder="e.g. Paid for 2 weeks advance"
               disabled={isReadOnly}
-              className="w-full p-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-600"
+              className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-600"
             />
           </div>
         </div>

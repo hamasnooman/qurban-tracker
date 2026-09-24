@@ -132,11 +132,11 @@ export default function AllPaymentsPage() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 dark:text-white tracking-tight flex items-center gap-2">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
             <Receipt className="w-7 h-7 text-emerald-700 dark:text-emerald-400" />
             <span>All Payments Ledger</span>
           </h1>
-          <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400 mt-1">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
             Complete transaction history across all 4 families with audit trails
           </p>
         </div>
@@ -168,17 +168,17 @@ export default function AllPaymentsPage() {
       )}
 
       {/* Filters Bar */}
-      <div className="bg-white dark:bg-stone-900 p-4 rounded-2xl border border-stone-200 dark:border-stone-800 shadow-xs space-y-3">
+      <div className="bg-white dark:bg-[#111622] p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs space-y-3">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {/* Family Filter */}
           <div>
-            <label className="block text-[11px] font-bold uppercase text-stone-400 mb-1">
+            <label className="block text-[11px] font-bold uppercase text-slate-400 mb-1">
               Filter by Family
             </label>
             <select
               value={selectedFamilyId}
               onChange={(e) => setSelectedFamilyId(e.target.value)}
-              className="w-full p-2.5 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white text-xs font-medium focus:outline-hidden focus:ring-2 focus:ring-emerald-600"
+              className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-xs font-medium focus:outline-hidden focus:ring-2 focus:ring-emerald-600"
             >
               <option value="all">All 4 Families</option>
               {families.map((f) => (
@@ -191,13 +191,13 @@ export default function AllPaymentsPage() {
 
           {/* Method Filter */}
           <div>
-            <label className="block text-[11px] font-bold uppercase text-stone-400 mb-1">
+            <label className="block text-[11px] font-bold uppercase text-slate-400 mb-1">
               Payment Method
             </label>
             <select
               value={selectedMethod}
               onChange={(e) => setSelectedMethod(e.target.value)}
-              className="w-full p-2.5 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white text-xs font-medium focus:outline-hidden focus:ring-2 focus:ring-emerald-600"
+              className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-xs font-medium focus:outline-hidden focus:ring-2 focus:ring-emerald-600"
             >
               <option value="all">All Methods</option>
               <option value="Cash">Cash</option>
@@ -210,28 +210,28 @@ export default function AllPaymentsPage() {
 
           {/* Search Box */}
           <div>
-            <label className="block text-[11px] font-bold uppercase text-stone-400 mb-1">
+            <label className="block text-[11px] font-bold uppercase text-slate-400 mb-1">
               Search Reference / Payer
             </label>
             <div className="relative">
-              <Search className="w-4 h-4 text-stone-400 absolute left-3 top-2.5" />
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search notes, ref, payer..."
-                className="w-full pl-9 pr-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-white text-xs focus:outline-hidden focus:ring-2 focus:ring-emerald-600"
+                className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-xs focus:outline-hidden focus:ring-2 focus:ring-emerald-600"
               />
             </div>
           </div>
         </div>
 
         {/* Filter Summary */}
-        <div className="flex items-center justify-between text-xs pt-2 border-t border-stone-100 dark:border-stone-800">
-          <span className="text-stone-500">
+        <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-100 dark:border-slate-800">
+          <span className="text-slate-500">
             Showing <strong>{filteredPayments.length}</strong> payments
           </span>
-          <span className="font-semibold text-stone-900 dark:text-white">
+          <span className="font-semibold text-slate-900 dark:text-white">
             Total for view: <strong className="text-emerald-700 dark:text-emerald-400">{formatCurrency(totalFilteredSum)}</strong>
           </span>
         </div>

@@ -82,23 +82,23 @@ export default function WeeklyTrackerPage() {
           >
             ← Back to Summary & Accounts
           </Link>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 dark:text-white tracking-tight flex items-center gap-2">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
             <CalendarDays className="w-7 h-7 text-emerald-700 dark:text-emerald-400" />
             <span>Weekly Savings Grid (51 Weeks)</span>
           </h1>
-          <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400 mt-1">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
             Automated waterfall allocation: money fills oldest unpaid weeks first
           </p>
         </div>
 
         {/* View Toggle */}
-        <div className="flex items-center gap-1.5 p-1 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-xs self-start sm:self-auto font-medium">
+        <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs self-start sm:self-auto font-medium">
           <button
             onClick={() => setFilterMode('active')}
             className={`px-3 py-1.5 rounded-lg transition-colors ${
               filterMode === 'active'
-                ? 'bg-white dark:bg-stone-900 text-stone-900 dark:text-white font-bold shadow-xs'
-                : 'text-stone-500 hover:text-stone-800'
+                ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-bold shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             Active Horizon
@@ -107,8 +107,8 @@ export default function WeeklyTrackerPage() {
             onClick={() => setFilterMode('due')}
             className={`px-3 py-1.5 rounded-lg transition-colors ${
               filterMode === 'due'
-                ? 'bg-white dark:bg-stone-900 text-stone-900 dark:text-white font-bold shadow-xs'
-                : 'text-stone-500 hover:text-stone-800'
+                ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-bold shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             Due Weeks Only (1–{currentWeek})
@@ -117,8 +117,8 @@ export default function WeeklyTrackerPage() {
             onClick={() => setFilterMode('all')}
             className={`px-3 py-1.5 rounded-lg transition-colors ${
               filterMode === 'all'
-                ? 'bg-white dark:bg-stone-900 text-stone-900 dark:text-white font-bold shadow-xs'
-                : 'text-stone-500 hover:text-stone-800'
+                ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-bold shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             All 51 Weeks
@@ -127,53 +127,53 @@ export default function WeeklyTrackerPage() {
       </div>
 
       {/* Legend Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-xs">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl bg-white dark:bg-[#111622] border border-slate-200 dark:border-slate-800 text-xs">
         <div className="flex flex-wrap items-center gap-3">
-          <span className="font-bold text-stone-500 uppercase text-[10px]">Legend:</span>
+          <span className="font-bold text-slate-500 uppercase text-[10px]">Legend:</span>
           <span className="flex items-center gap-1">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-            <span className="text-stone-700 dark:text-stone-300">Paid (Full Rs. 1,500)</span>
+            <span className="text-slate-700 dark:text-slate-300 font-medium">Paid (Full Rs. 1,500)</span>
           </span>
           <span className="flex items-center gap-1">
             <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
-            <span className="text-stone-700 dark:text-stone-300">Part-paid</span>
+            <span className="text-slate-700 dark:text-slate-300 font-medium">Part-paid</span>
           </span>
           <span className="flex items-center gap-1">
             <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
-            <span className="text-stone-700 dark:text-stone-300">Not paid (Past/Current)</span>
+            <span className="text-slate-700 dark:text-slate-300 font-medium">Not paid</span>
           </span>
           <span className="flex items-center gap-1">
             <span className="w-2.5 h-2.5 rounded-full bg-blue-500" />
-            <span className="text-stone-700 dark:text-stone-300">Paid in advance</span>
+            <span className="text-slate-700 dark:text-slate-300 font-medium">Paid in advance</span>
           </span>
         </div>
-        <div className="text-[11px] font-mono text-emerald-700 dark:text-emerald-400 font-semibold">
+        <div className="text-[11px] font-mono text-emerald-700 dark:text-emerald-400 font-bold">
           ★ Current Week: Week {currentWeek}
         </div>
       </div>
 
       {/* The 51-Week Grid Table */}
-      <div className="bg-white dark:bg-stone-900 rounded-3xl border border-stone-200 dark:border-stone-800 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-[#111622] rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
         <div className="overflow-x-auto max-h-[70vh]">
           <table className="w-full text-left text-xs border-collapse">
-            <thead className="sticky top-0 z-20 bg-stone-100 dark:bg-stone-800 shadow-xs">
-              <tr className="border-b border-stone-200 dark:border-stone-700 text-stone-500 dark:text-stone-300 font-bold uppercase text-[11px]">
+            <thead className="sticky top-0 z-20 bg-slate-100 dark:bg-slate-800/95 backdrop-blur-xs shadow-xs">
+              <tr className="border-b border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-bold uppercase text-[11px]">
                 <th className="py-3.5 px-4 w-20">Week #</th>
                 <th className="py-3.5 px-4 w-32">Week Date</th>
                 {families.map((fam) => (
                   <th key={fam.id} className="py-3.5 px-4 text-center">
-                    <div>{fam.name}</div>
-                    <div className="text-[10px] font-normal text-stone-400">Rs. 1,500/wk</div>
+                    <div className="font-extrabold text-slate-900 dark:text-white">{fam.name}</div>
+                    <div className="text-[10px] font-normal text-slate-500 dark:text-slate-400">Rs. 1,500/wk</div>
                   </th>
                 ))}
                 <th className="py-3.5 px-4 text-right w-36">
-                  <div>Week Total</div>
-                  <div className="text-[10px] font-normal text-stone-400">Target: Rs. 6,000</div>
+                  <div className="font-extrabold text-slate-900 dark:text-white">Week Total</div>
+                  <div className="text-[10px] font-normal text-slate-500 dark:text-slate-400">Target: Rs. 6,000</div>
                 </th>
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-stone-100 dark:divide-stone-800/60">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
               {visibleRows.map((row) => {
                 const isCurrent = row.week_number === currentWeek;
                 const isMet = row.row_total >= row.row_target;
@@ -184,17 +184,17 @@ export default function WeeklyTrackerPage() {
                     className={`transition-colors ${
                       isCurrent
                         ? 'bg-amber-50/70 dark:bg-amber-950/30 font-semibold'
-                        : 'hover:bg-stone-50 dark:hover:bg-stone-800/40'
+                        : 'hover:bg-slate-50 dark:hover:bg-slate-800/40'
                     }`}
                   >
                     {/* Week Number */}
                     <td className="py-3 px-4 whitespace-nowrap">
                       <div className="flex items-center gap-1.5">
-                        <span className="font-mono font-bold text-stone-800 dark:text-stone-200">
+                        <span className="font-mono font-bold text-slate-900 dark:text-slate-100">
                           W{row.week_number}
                         </span>
                         {isCurrent && (
-                          <span className="px-1.5 py-0.5 rounded text-[10px] bg-amber-500 text-stone-950 font-black">
+                          <span className="px-1.5 py-0.5 rounded text-[10px] bg-amber-500 text-slate-950 font-black">
                             NOW
                           </span>
                         )}
@@ -202,7 +202,7 @@ export default function WeeklyTrackerPage() {
                     </td>
 
                     {/* Week Date */}
-                    <td className="py-3 px-4 font-mono text-stone-500 dark:text-stone-400 whitespace-nowrap">
+                    <td className="py-3 px-4 font-mono text-slate-500 dark:text-slate-400 whitespace-nowrap">
                       {row.formatted_date}
                     </td>
 
@@ -225,7 +225,7 @@ export default function WeeklyTrackerPage() {
                               ? 'text-emerald-700 dark:text-emerald-400'
                               : row.row_total > 0
                               ? 'text-amber-700 dark:text-amber-400'
-                              : 'text-stone-400'
+                              : 'text-slate-400'
                           }`}
                         >
                           {formatCurrency(row.row_total)}
@@ -241,7 +241,7 @@ export default function WeeklyTrackerPage() {
             </tbody>
 
             {/* Sticky Grand Totals Row */}
-            <tfoot className="sticky bottom-0 z-20 bg-stone-900 text-white font-bold border-t-2 border-amber-400 shadow-xl">
+            <tfoot className="sticky bottom-0 z-20 bg-slate-950 text-white font-bold border-t-2 border-amber-400 shadow-xl">
               <tr>
                 <td className="py-4 px-4 uppercase text-xs tracking-wider" colSpan={2}>
                   Grand Total (51 Weeks)
@@ -253,7 +253,7 @@ export default function WeeklyTrackerPage() {
                       <div className="text-sm font-black text-amber-300">
                         {formatCurrency(paid)}
                       </div>
-                      <div className="text-[10px] text-stone-400 font-normal">
+                      <div className="text-[10px] text-slate-400 font-normal">
                         of Rs. {(51 * 1500).toLocaleString()} target
                       </div>
                     </td>
@@ -263,7 +263,7 @@ export default function WeeklyTrackerPage() {
                   <div className="text-base font-black text-amber-300">
                     {formatCurrency(gridData.grandTotal)}
                   </div>
-                  <div className="text-[10px] text-stone-400 font-normal">
+                  <div className="text-[10px] text-slate-400 font-normal">
                     Target: {formatCurrency(gridData.totalTarget)}
                   </div>
                 </td>
