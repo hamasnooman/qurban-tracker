@@ -152,20 +152,35 @@ function AddPaymentForm() {
         </div>
       )}
 
-      {/* Success / Error Notification */}
-      {message && (
-        <div
-          className={`p-4 rounded-2xl flex items-start gap-3 text-xs font-semibold ${
-            message.type === 'success'
-              ? 'bg-emerald-50 text-emerald-900 border border-emerald-200 dark:bg-emerald-950 dark:text-emerald-200'
-              : 'bg-rose-50 text-rose-900 border border-rose-200 dark:bg-rose-950 dark:text-rose-200'
-          }`}
-        >
-          {message.type === 'success' ? (
-            <Check className="w-4 h-4 text-emerald-600 shrink-0" />
-          ) : (
-            <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
-          )}
+      {/* Confirmation Saved Popup Modal */}
+      {message?.type === 'success' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-[#111622] rounded-3xl p-6 sm:p-7 max-w-sm w-full border-2 border-emerald-500 shadow-2xl text-center space-y-4 animate-in zoom-in-95 duration-200">
+            <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center text-3xl font-black shadow-inner border border-emerald-300 dark:border-emerald-700">
+              <Check className="w-8 h-8 stroke-[3]" />
+            </div>
+            <div>
+              <h3 className="text-lg font-black text-slate-900 dark:text-white">
+                Confirmation: Saved Successfully!
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
+                {message.text}
+              </p>
+            </div>
+            <button
+              onClick={() => router.push('/payments')}
+              className="w-full py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-md transition-all active:scale-95"
+            >
+              Go to Payments Ledger
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Error Notification */}
+      {message?.type === 'error' && (
+        <div className="p-4 rounded-2xl flex items-start gap-3 text-xs font-semibold bg-rose-50 text-rose-900 border border-rose-200 dark:bg-rose-950 dark:text-rose-200">
+          <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
           <span>{message.text}</span>
         </div>
       )}

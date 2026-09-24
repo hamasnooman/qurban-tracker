@@ -215,8 +215,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       return { success: false, error: 'Password is required.' };
     }
 
-    const adminSecret = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || '2027';
-    if (enteredPin !== adminSecret) {
+    const hamasPass = process.env.NEXT_PUBLIC_HAMAS_PASSWORD || 'Hamas@2027';
+    const nihlaPass = process.env.NEXT_PUBLIC_NIHLA_PASSWORD || '2027';
+    const requiredPass = adminType === 'main_admin' ? hamasPass : nihlaPass;
+
+    if (enteredPin !== requiredPass) {
       return { success: false, error: 'Incorrect password. Access denied.' };
     }
 

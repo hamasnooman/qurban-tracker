@@ -23,6 +23,7 @@ import {
   X,
   KeyRound,
   LogOut,
+  FileText,
 } from 'lucide-react';
 import { AdminLoginModal } from './AdminLoginModal';
 
@@ -36,6 +37,9 @@ export function Navigation() {
   const navItems = [
     { href: '/', label: 'Summary & Accounts', icon: LayoutDashboard },
     { href: '/tracker', label: '51-Week Grid', icon: CalendarDays },
+    { href: '/payments', label: 'Payments Ledger', icon: Receipt },
+    { href: '/report', label: 'PDF Final Summary', icon: FileText },
+    { href: '/settings', label: 'Fund Settings', icon: Settings },
     ...(isAdminOrSub ? [{ href: '/payments/add', label: '+ Add Payment', icon: PlusCircle, highlight: true }] : []),
   ];
 
@@ -336,46 +340,87 @@ export function Navigation() {
         onClose={() => setLoginModalOpen(false)}
       />
 
-      {/* ================= MOBILE BOTTOM NAVIGATION ================= */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/95 dark:bg-[#111622]/95 backdrop-blur border-t border-slate-200 dark:border-slate-800 px-6 py-2 flex items-center justify-around shadow-lg">
+      {/* ================= MOBILE BOTTOM NAVIGATION (SOLID OPAQUE & FIXED) ================= */}
+      <nav className="md:hidden fixed inset-x-0 bottom-0 z-50 bg-[#0c121e] border-t border-slate-800 px-2 pt-1.5 pb-[max(env(safe-area-inset-bottom),0.5rem)] flex items-center justify-around shadow-2xl">
+        {/* Summary Tab */}
         <Link
           href="/"
-          className={`flex flex-col items-center py-1 px-4 rounded-xl text-xs font-medium transition-colors ${
+          className={`flex flex-col items-center py-1 px-1.5 rounded-xl text-[10px] font-medium transition-colors ${
             pathname === '/'
-              ? 'text-emerald-700 dark:text-emerald-400 font-bold'
-              : 'text-slate-500 dark:text-slate-400'
+              ? 'text-emerald-400 font-bold'
+              : 'text-slate-400 hover:text-slate-200'
           }`}
         >
           <LayoutDashboard className="w-5 h-5 mb-0.5" />
           <span>Summary</span>
         </Link>
 
-        {/* Center Prominent Add Button: ONLY for Main Admin (Mr. Hamas) and Sub Admin (Nihla) */}
+        {/* 51-Week Grid Tab */}
+        <Link
+          href="/tracker"
+          className={`flex flex-col items-center py-1 px-1.5 rounded-xl text-[10px] font-medium transition-colors ${
+            pathname === '/tracker'
+              ? 'text-emerald-400 font-bold'
+              : 'text-slate-400 hover:text-slate-200'
+          }`}
+        >
+          <CalendarDays className="w-5 h-5 mb-0.5" />
+          <span>Grid</span>
+        </Link>
+
+        {/* Center Prominent Add Button (For Admin / Sub Admin) */}
         {isAdminOrSub && (
           <Link
             href="/payments/add"
-            className="flex flex-col items-center -mt-6"
+            className="flex flex-col items-center -mt-5"
             title="Add Payment"
           >
-            <div className="w-12 h-12 rounded-full bg-emerald-700 text-white flex items-center justify-center shadow-lg shadow-emerald-700/40 hover:scale-105 active:scale-95 transition-transform">
-              <PlusCircle className="w-6 h-6 text-amber-300" />
+            <div className="w-11 h-11 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-lg shadow-emerald-700/50 hover:scale-105 active:scale-95 transition-transform border-2 border-[#0c121e]">
+              <PlusCircle className="w-5 h-5 text-amber-300" />
             </div>
-            <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-400 mt-0.5">
+            <span className="text-[10px] font-bold text-emerald-400 mt-0.5">
               Add
             </span>
           </Link>
         )}
 
+        {/* Payments Ledger Tab */}
         <Link
-          href="/tracker"
-          className={`flex flex-col items-center py-1 px-4 rounded-xl text-xs font-medium transition-colors ${
-            pathname === '/tracker'
-              ? 'text-emerald-700 dark:text-emerald-400 font-bold'
-              : 'text-slate-500 dark:text-slate-400'
+          href="/payments"
+          className={`flex flex-col items-center py-1 px-1.5 rounded-xl text-[10px] font-medium transition-colors ${
+            pathname.startsWith('/payments') && pathname !== '/payments/add'
+              ? 'text-emerald-400 font-bold'
+              : 'text-slate-400 hover:text-slate-200'
           }`}
         >
-          <CalendarDays className="w-5 h-5 mb-0.5" />
-          <span>51-Week Grid</span>
+          <Receipt className="w-5 h-5 mb-0.5" />
+          <span>Ledger</span>
+        </Link>
+
+        {/* PDF Final Summary Tab */}
+        <Link
+          href="/report"
+          className={`flex flex-col items-center py-1 px-1.5 rounded-xl text-[10px] font-medium transition-colors ${
+            pathname === '/report'
+              ? 'text-emerald-400 font-bold'
+              : 'text-slate-400 hover:text-slate-200'
+          }`}
+        >
+          <FileText className="w-5 h-5 mb-0.5" />
+          <span>PDF</span>
+        </Link>
+
+        {/* Settings Tab */}
+        <Link
+          href="/settings"
+          className={`flex flex-col items-center py-1 px-1.5 rounded-xl text-[10px] font-medium transition-colors ${
+            pathname === '/settings'
+              ? 'text-emerald-400 font-bold'
+              : 'text-slate-400 hover:text-slate-200'
+          }`}
+        >
+          <Settings className="w-5 h-5 mb-0.5" />
+          <span>Settings</span>
         </Link>
       </nav>
     </>

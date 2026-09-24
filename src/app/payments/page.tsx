@@ -68,17 +68,11 @@ export default function AllPaymentsPage() {
     return filteredPayments.reduce((sum, p) => sum + (Number(p.amount) || 0), 0);
   }, [filteredPayments]);
 
-  const canEditPayment = (p: Payment) => {
-    if (currentUser.role === 'main_admin') return true;
-    if (currentUser.role === 'sub_admin') {
-      const todayIso = formatDateISO(getColomboDate());
-      const pDateIso = formatDateISO(new Date(p.created_at));
-      return p.entered_by === currentUser.name && todayIso === pDateIso;
-    }
-    return false;
+  const canEditPayment = (_p?: Payment) => {
+    return currentUser.role === 'main_admin';
   };
 
-  const canDeletePayment = () => {
+  const canDeletePayment = (_p?: Payment) => {
     return currentUser.role === 'main_admin';
   };
 
@@ -152,11 +146,28 @@ export default function AllPaymentsPage() {
         )}
       </div>
 
-      {/* Notifications */}
+      {/* Notifications / Confirmation Popup Modal */}
       {actionSuccess && (
-        <div className="p-4 rounded-xl bg-emerald-50 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-200 border border-emerald-200 text-xs font-semibold flex items-center gap-2">
-          <Check className="w-4 h-4 text-emerald-600" />
-          <span>{actionSuccess}</span>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-[#111622] rounded-3xl p-6 sm:p-7 max-w-sm w-full border-2 border-emerald-500 shadow-2xl text-center space-y-4 animate-in zoom-in-95 duration-200">
+            <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center text-3xl font-black shadow-inner border border-emerald-300 dark:border-emerald-700">
+              <Check className="w-8 h-8 stroke-[3]" />
+            </div>
+            <div>
+              <h3 className="text-lg font-black text-slate-900 dark:text-white">
+                Confirmation: Saved Successfully!
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
+                {actionSuccess}
+              </p>
+            </div>
+            <button
+              onClick={() => setActionSuccess(null)}
+              className="w-full py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-md transition-all active:scale-95"
+            >
+              Continue
+            </button>
+          </div>
         </div>
       )}
 

@@ -86,9 +86,6 @@ export default function WeeklyTrackerPage() {
             <CalendarDays className="w-7 h-7 text-emerald-700 dark:text-emerald-400" />
             <span>Weekly Savings Grid (51 Weeks)</span>
           </h1>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
-            Automated waterfall allocation: money fills oldest unpaid weeks first
-          </p>
         </div>
 
         {/* View Toggle */}
@@ -155,11 +152,15 @@ export default function WeeklyTrackerPage() {
       {/* The 51-Week Grid Table */}
       <div className="bg-white dark:bg-[#111622] rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
         <div className="overflow-x-auto max-h-[70vh]">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead className="sticky top-0 z-20 bg-slate-100 dark:bg-slate-800/95 backdrop-blur-xs shadow-xs">
+          <table className="w-full min-w-[700px] text-left text-xs border-collapse">
+            <thead className="sticky top-0 z-30 bg-slate-100 dark:bg-slate-800 shadow-xs">
               <tr className="border-b border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-bold uppercase text-[11px]">
-                <th className="py-3.5 px-4 w-20">Week #</th>
-                <th className="py-3.5 px-4 w-32">Week Date</th>
+                <th className="py-3.5 px-3 sm:px-4 w-18 sm:w-20 min-w-[4.5rem] sm:min-w-[5rem] sticky left-0 z-40 bg-slate-100 dark:bg-slate-800">
+                  Week #
+                </th>
+                <th className="py-3.5 px-3 sm:px-4 w-24 sm:w-28 min-w-[6rem] sm:min-w-[7rem] sticky left-[4.5rem] sm:left-20 z-40 bg-slate-100 dark:bg-slate-800 border-r border-slate-300 dark:border-slate-700 shadow-[3px_0_5px_-2px_rgba(0,0,0,0.2)]">
+                  Week Date
+                </th>
                 {families.map((fam) => (
                   <th key={fam.id} className="py-3.5 px-4 text-center">
                     <div className="font-extrabold text-slate-900 dark:text-white">{fam.name}</div>
@@ -187,8 +188,14 @@ export default function WeeklyTrackerPage() {
                         : 'hover:bg-slate-50 dark:hover:bg-slate-800/40'
                     }`}
                   >
-                    {/* Week Number */}
-                    <td className="py-3 px-4 whitespace-nowrap">
+                    {/* Sticky Week Number */}
+                    <td
+                      className={`py-3 px-3 sm:px-4 whitespace-nowrap sticky left-0 z-20 ${
+                        isCurrent
+                          ? 'bg-amber-100 dark:bg-[#1a1712]'
+                          : 'bg-white dark:bg-[#111622]'
+                      }`}
+                    >
                       <div className="flex items-center gap-1.5">
                         <span className="font-mono font-bold text-slate-900 dark:text-slate-100">
                           W{row.week_number}
@@ -201,12 +208,18 @@ export default function WeeklyTrackerPage() {
                       </div>
                     </td>
 
-                    {/* Week Date */}
-                    <td className="py-3 px-4 font-mono text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                    {/* Sticky Week Date with right border */}
+                    <td
+                      className={`py-3 px-3 sm:px-4 font-mono text-slate-500 dark:text-slate-400 whitespace-nowrap sticky left-[4.5rem] sm:left-20 z-20 border-r border-slate-200 dark:border-slate-700/80 shadow-[3px_0_5px_-2px_rgba(0,0,0,0.15)] ${
+                        isCurrent
+                          ? 'bg-amber-100 dark:bg-[#1a1712]'
+                          : 'bg-white dark:bg-[#111622]'
+                      }`}
+                    >
                       {row.formatted_date}
                     </td>
 
-                    {/* 4 Families Cells */}
+                    {/* 4 Families Cells (Horizontally scrollable) */}
                     {families.map((fam) => {
                       const cell = row.family_cells[fam.id];
                       return (
@@ -241,9 +254,12 @@ export default function WeeklyTrackerPage() {
             </tbody>
 
             {/* Sticky Grand Totals Row */}
-            <tfoot className="sticky bottom-0 z-20 bg-slate-950 text-white font-bold border-t-2 border-amber-400 shadow-xl">
+            <tfoot className="sticky bottom-0 z-30 bg-slate-950 text-white font-bold border-t-2 border-amber-400 shadow-xl">
               <tr>
-                <td className="py-4 px-4 uppercase text-xs tracking-wider" colSpan={2}>
+                <td
+                  className="py-4 px-3 sm:px-4 uppercase text-xs tracking-wider sticky left-0 z-40 bg-slate-950 border-r border-slate-800 shadow-[3px_0_5px_-2px_rgba(0,0,0,0.3)]"
+                  colSpan={2}
+                >
                   Grand Total (51 Weeks)
                 </td>
                 {families.map((fam) => {
