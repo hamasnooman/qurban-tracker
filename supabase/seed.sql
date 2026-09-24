@@ -41,7 +41,7 @@ values
   ('fam-nooman', 'Mr. Nooman', 'Nooman Family', 'Nooman', 'Mrs. Nooman', '+94771234561', '+94771234562', 1),
   ('fam-rikaz', 'Mr. Rikaz', 'Rikaz Family', 'Rikaz', 'Mrs. Rikaz', '+94772345671', '+94772345672', 2),
   ('fam-haneef', 'Mr. Haneef', 'Haneef Family', 'Haneef', 'Mrs. Haneef', '+94773456781', '+94773456782', 3),
-  ('fam-hamas', 'Mr. Hamas', 'Hamas Family', 'Hamas', 'Mrs. Hamas', '+94774567891', '+94774567892', 4)
+  ('fam-hamas', 'Mr. Hamas', 'Mr. Hamas', 'Mr. Hamas', null, '+94774567891', null, 4)
 on conflict (id) do update set
   name = excluded.name,
   family_title = excluded.family_title,

@@ -34,11 +34,11 @@ export const INITIAL_FAMILIES: Family[] = [
   {
     id: 'fam-hamas',
     name: 'Mr. Hamas',
-    family_title: 'Hamas Family',
-    husband_name: 'Hamas',
-    wife_name: 'Mrs. Hamas',
+    family_title: 'Mr. Hamas',
+    husband_name: 'Mr. Hamas',
+    wife_name: '',
     husband_phone: '+94774567891',
-    wife_phone: '+94774567892',
+    wife_phone: '',
     sort_order: 4,
   },
 ];

@@ -92,7 +92,7 @@ export default function DashboardPage() {
         </div>
 
         <div className="flex items-center gap-2 self-start sm:self-auto">
-          {currentUser.role !== 'family' && (
+          {(currentUser.role === 'main_admin' || currentUser.role === 'sub_admin') && (
             <Link
               href="/payments/add"
               className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs shadow-xs transition-all active:scale-95"
@@ -231,7 +231,7 @@ export default function DashboardPage() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+          <table className="w-full text-left text-xs whitespace-nowrap">
             <thead>
               <tr className="border-b border-stone-200 dark:border-stone-800 text-stone-400 uppercase font-semibold text-[11px]">
                 <th className="py-2 px-3">Date</th>
@@ -259,7 +259,7 @@ export default function DashboardPage() {
                     <td className="py-2.5 px-3 text-stone-600 dark:text-stone-300">
                       {p.payment_method}
                     </td>
-                    <td className="py-2.5 px-3 text-stone-500 truncate max-w-xs">
+                    <td className="py-2.5 px-3 text-stone-500 max-w-xs truncate">
                       {p.note || p.reference_number || '—'}
                     </td>
                     <td className="py-2.5 px-3 text-stone-400 text-right text-[11px]">

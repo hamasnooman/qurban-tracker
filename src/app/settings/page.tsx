@@ -406,27 +406,31 @@ export default function SettingsPage() {
                     className="w-full p-2 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-900 dark:text-white font-mono"
                   />
                 </div>
-                <div>
-                  <label className="block font-semibold text-stone-400 mb-1">Wife Name</label>
-                  <input
-                    type="text"
-                    value={fam.wife_name}
-                    onChange={(e) => handleFamilyChange(fam.id, 'wife_name', e.target.value)}
-                    disabled={!isMainAdmin}
-                    className="w-full p-2 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-900 dark:text-white"
-                  />
-                </div>
-                <div>
-                  <label className="block font-semibold text-stone-400 mb-1">Wife Phone</label>
-                  <input
-                    type="text"
-                    value={fam.wife_phone}
-                    onChange={(e) => handleFamilyChange(fam.id, 'wife_phone', e.target.value)}
-                    disabled={!isMainAdmin}
-                    placeholder="+9477xxxxxxx"
-                    className="w-full p-2 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-900 dark:text-white font-mono"
-                  />
-                </div>
+                {fam.id !== 'fam-hamas' && (
+                  <>
+                    <div>
+                      <label className="block font-semibold text-stone-400 mb-1">Wife Name</label>
+                      <input
+                        type="text"
+                        value={fam.wife_name}
+                        onChange={(e) => handleFamilyChange(fam.id, 'wife_name', e.target.value)}
+                        disabled={!isMainAdmin}
+                        className="w-full p-2 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-900 dark:text-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold text-stone-400 mb-1">Wife Phone</label>
+                      <input
+                        type="text"
+                        value={fam.wife_phone}
+                        onChange={(e) => handleFamilyChange(fam.id, 'wife_phone', e.target.value)}
+                        disabled={!isMainAdmin}
+                        placeholder="+9477xxxxxxx"
+                        className="w-full p-2 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-900 dark:text-white font-mono"
+                      />
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           ))}

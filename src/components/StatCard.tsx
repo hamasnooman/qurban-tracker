@@ -40,17 +40,17 @@ export function StatCard({
   };
 
   return (
-    <div className="bg-white dark:bg-stone-900 rounded-2xl p-5 border border-stone-200 dark:border-stone-800 shadow-sm hover:shadow-md transition-all">
-      <div className="flex items-start justify-between">
-        <div className="space-y-1">
-          <p className="text-xs font-semibold uppercase tracking-wider text-stone-500 dark:text-stone-400">
+    <div className="bg-white dark:bg-stone-900 rounded-2xl p-3.5 sm:p-5 border border-stone-200 dark:border-stone-800 shadow-xs hover:shadow-md transition-all">
+      <div className="flex items-start justify-between gap-2">
+        <div className="space-y-0.5 sm:space-y-1 min-w-0">
+          <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-stone-500 dark:text-stone-400 truncate">
             {title}
           </p>
-          <div className="text-2xl md:text-3xl font-extrabold text-stone-900 dark:text-white tracking-tight">
+          <div className="text-xl sm:text-2xl md:text-3xl font-extrabold text-stone-900 dark:text-white tracking-tight truncate">
             {value}
           </div>
         </div>
-        <div className="w-11 h-11 rounded-xl bg-amber-50 dark:bg-stone-800 text-amber-700 dark:text-amber-400 flex items-center justify-center text-xl shrink-0 border border-amber-100/80 dark:border-stone-700">
+        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-amber-50 dark:bg-stone-800 text-amber-700 dark:text-amber-400 flex items-center justify-center text-base sm:text-xl shrink-0 border border-amber-100/80 dark:border-stone-700">
           {icon}
         </div>
       </div>

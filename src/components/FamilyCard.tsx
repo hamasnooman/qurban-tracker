@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { useApp } from '@/context/AppContext';
 import { FamilyFinancialStatus } from '@/types';
 import { formatCurrency, formatDisplayDate } from '@/lib/calculations';
 import { CheckCircle2, AlertTriangle, ArrowUpRight, ChevronRight } from 'lucide-react';
@@ -11,8 +12,10 @@ interface FamilyCardProps {
 }
 
 export function FamilyCard({ status }: FamilyCardProps) {
+  const { currentUser } = useApp();
   const isDue = status.status === 'due';
   const isAdvance = status.status === 'advance';
+  const canAdd = currentUser.role === 'main_admin' || currentUser.role === 'sub_admin';
 
   return (
     <div className="bg-white dark:bg-stone-900 rounded-2xl p-4 border border-stone-200 dark:border-stone-800 shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
@@ -90,12 +93,14 @@ export function FamilyCard({ status }: FamilyCardProps) {
           <span>Statement</span>
           <ChevronRight className="w-3.5 h-3.5" />
         </Link>
-        <Link
-          href={`/payments/add?family=${status.family_id}`}
-          className="font-semibold text-emerald-700 dark:text-emerald-400 hover:underline"
-        >
-          + Add Pay
-        </Link>
+        {canAdd && (
+          <Link
+            href={`/payments/add?family=${status.family_id}`}
+            className="font-semibold text-emerald-700 dark:text-emerald-400 hover:underline"
+          >
+            + Add Pay
+          </Link>
+        )}
       </div>
     </div>
   );

@@ -209,17 +209,19 @@ function AddPaymentForm() {
                 >
                   👨 {selectedFamily.husband_name || selectedFamily.name}
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setPaidBy(selectedFamily.wife_name || `${selectedFamily.name} Wife`)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
-                    paidBy === (selectedFamily.wife_name || `${selectedFamily.name} Wife`)
-                      ? 'bg-emerald-700 text-white shadow-xs'
-                      : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200'
-                  }`}
-                >
-                  🧕 {selectedFamily.wife_name || 'Wife'}
-                </button>
+                {selectedFamily.wife_name && selectedFamily.wife_name.trim() !== '' && (
+                  <button
+                    type="button"
+                    onClick={() => setPaidBy(selectedFamily.wife_name)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+                      paidBy === selectedFamily.wife_name
+                        ? 'bg-emerald-700 text-white shadow-xs'
+                        : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200'
+                    }`}
+                  >
+                    🧕 {selectedFamily.wife_name}
+                  </button>
+                )}
               </>
             )}
           </div>

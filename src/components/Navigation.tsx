@@ -28,15 +28,16 @@ export function Navigation() {
   const { currentUser, switchUser, users, theme, toggleTheme, isSupabase } = useApp();
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const isAdminOrSub = currentUser.role === 'main_admin' || currentUser.role === 'sub_admin';
 
   const navItems = [
     { href: '/', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/tracker', label: 'Weekly Tracker', icon: CalendarDays },
-    { href: '/payments/add', label: 'Add Payment', icon: PlusCircle, highlight: true },
+    ...(isAdminOrSub ? [{ href: '/payments/add', label: 'Add Payment', icon: PlusCircle, highlight: true }] : []),
     { href: '/payments', label: 'All Payments', icon: Receipt },
     { href: '/weekly-card', label: 'Weekly Card', icon: Share2 },
-    { href: '/family/fam-nooman', label: 'Family Statement', icon: Users },
-    { href: '/settings', label: 'Settings', icon: Settings, adminOnly: true },
+    { href: `/family/${currentUser.family_id || 'fam-hamas'}`, label: 'Family Statement', icon: Users },
+    ...(currentUser.role === 'main_admin' ? [{ href: '/settings', label: 'Settings', icon: Settings, adminOnly: true }] : []),
   ];
 
   const getRoleBadge = (role: string) => {
@@ -286,7 +287,7 @@ export function Navigation() {
                       }`}
                     >
                       <span>{u.name}</span>
-                      <span>{u.role}</span>
+                      <span>{u.role.replace('_', ' ')}</span>
                     </button>
                   ))}
                 </div>
@@ -326,19 +327,21 @@ export function Navigation() {
           <span>Tracker</span>
         </Link>
 
-        {/* Center Prominent Add Button */}
-        <Link
-          href="/payments/add"
-          className="flex flex-col items-center -mt-5"
-          title="Add Payment"
-        >
-          <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-emerald-600 to-emerald-800 text-white flex items-center justify-center shadow-lg shadow-emerald-700/40 hover:scale-105 active:scale-95 transition-transform">
-            <PlusCircle className="w-6 h-6 text-amber-300" />
-          </div>
-          <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-400 mt-0.5">
-            Add
-          </span>
-        </Link>
+        {/* Center Prominent Add Button: ONLY for Main Admin (Mr. Hamas) and Sub Admin (Nihla) */}
+        {isAdminOrSub && (
+          <Link
+            href="/payments/add"
+            className="flex flex-col items-center -mt-5"
+            title="Add Payment"
+          >
+            <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-emerald-600 to-emerald-800 text-white flex items-center justify-center shadow-lg shadow-emerald-700/40 hover:scale-105 active:scale-95 transition-transform">
+              <PlusCircle className="w-6 h-6 text-amber-300" />
+            </div>
+            <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-400 mt-0.5">
+              Add
+            </span>
+          </Link>
+        )}
 
         <Link
           href="/weekly-card"

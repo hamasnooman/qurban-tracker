@@ -140,28 +140,32 @@ export default function FamilyPage() {
             </div>
 
             {/* Contact numbers */}
-            <div className="flex flex-wrap items-center gap-4 mt-2 text-xs text-stone-600 dark:text-stone-300">
+            <div className="flex flex-wrap items-center gap-3 mt-2 text-xs text-stone-600 dark:text-stone-300">
               <span className="flex items-center gap-1.5">
-                <span className="font-semibold text-stone-400">Husband:</span>
+                <span className="font-semibold text-stone-400">Contact:</span>
                 <span>{family.husband_name}</span>
                 <span className="font-mono text-stone-400">({family.husband_phone || 'No phone'})</span>
               </span>
-              <span className="text-stone-300 dark:text-stone-700">•</span>
-              <span className="flex items-center gap-1.5">
-                <span className="font-semibold text-stone-400">Wife:</span>
-                <span>{family.wife_name}</span>
-                <span className="font-mono text-stone-400">({family.wife_phone || 'No phone'})</span>
-              </span>
+              {family.wife_name && family.wife_name.trim() !== '' && (
+                <>
+                  <span className="text-stone-300 dark:text-stone-700">•</span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="font-semibold text-stone-400">Wife:</span>
+                    <span>{family.wife_name}</span>
+                    <span className="font-mono text-stone-400">({family.wife_phone || 'No phone'})</span>
+                  </span>
+                </>
+              )}
             </div>
           </div>
 
-          {currentUser.role !== 'family' && (
+          {(currentUser.role === 'main_admin' || currentUser.role === 'sub_admin') && (
             <Link
               href={`/payments/add?family=${family.id}`}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-md transition-all self-start md:self-auto"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-sm transition-all self-start md:self-auto"
             >
               <PlusCircle className="w-4 h-4 text-amber-300" />
-              <span>Add Payment for {family.name}</span>
+              <span>Add Payment</span>
             </Link>
           )}
         </div>
