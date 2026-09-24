@@ -43,6 +43,7 @@ export default function DashboardPage() {
   const [copiedAccount, setCopiedAccount] = useState<string | null>(null);
   const [copiedWhatsapp, setCopiedWhatsapp] = useState(false);
 
+  const isMainAdmin = currentUser.role === 'main_admin';
   const isAdminOrSub = currentUser.role === 'main_admin' || currentUser.role === 'sub_admin';
 
   if (!isInitialized) {
@@ -191,14 +192,16 @@ Jazakallahu Khairan 🤲 · #QurbanFamily2027`;
             )}
           </button>
 
-          <Link
-            href="/report"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-900 text-amber-300 border border-amber-400/40 text-xs font-bold transition-all active:scale-95 shadow-xs"
-            title="View and download complete PDF Final Summary"
-          >
-            <FileText className="w-4 h-4 text-amber-300" />
-            <span>PDF Summary</span>
-          </Link>
+          {isMainAdmin && (
+            <Link
+              href="/report"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-900 text-amber-300 border border-amber-400/40 text-xs font-bold transition-all active:scale-95 shadow-xs"
+              title="View and download complete PDF Final Summary (Main Admin Only)"
+            >
+              <FileText className="w-4 h-4 text-amber-300" />
+              <span>PDF Summary</span>
+            </Link>
+          )}
         </div>
       </div>
 

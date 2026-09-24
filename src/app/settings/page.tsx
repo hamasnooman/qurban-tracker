@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { useApp } from '@/context/AppContext';
+import { AdminLoginModal } from '@/components/AdminLoginModal';
 import {
   formatCurrency,
   formatDisplayDate,
@@ -22,9 +24,12 @@ import {
   Clock,
   Phone,
   Radio,
+  Lock,
+  KeyRound,
 } from 'lucide-react';
 
 export default function SettingsPage() {
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
   const {
     settings,
     families,
@@ -152,6 +157,44 @@ export default function SettingsPage() {
       setMessage({ type: 'error', text: res.message });
     }
   };
+
+  // Main Admin Only Access Gate
+  if (!isMainAdmin) {
+    return (
+      <div className="max-w-md mx-auto py-16 px-4 text-center space-y-6">
+        <div className="w-16 h-16 rounded-3xl bg-amber-500/10 text-amber-500 border border-amber-500/30 flex items-center justify-center mx-auto shadow-inner">
+          <Lock className="w-8 h-8" />
+        </div>
+        <div className="space-y-2">
+          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/30">
+            Main Admin Only
+          </span>
+          <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+            Main Admin Access Required
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+            Fund configuration and administrative settings are restricted exclusively to <strong>Mr. Hamas</strong> (Main Admin).
+          </p>
+        </div>
+        <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <Link
+            href="/"
+            className="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+          >
+            ← Return to Summary
+          </Link>
+          <button
+            onClick={() => setLoginModalOpen(true)}
+            className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-md transition-all active:scale-95 flex items-center justify-center gap-2"
+          >
+            <KeyRound className="w-4 h-4 text-amber-300" />
+            <span>Sign In as Mr. Hamas</span>
+          </button>
+        </div>
+        <AdminLoginModal isOpen={loginModalOpen} onClose={() => setLoginModalOpen(false)} />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">

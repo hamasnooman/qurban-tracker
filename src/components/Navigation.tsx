@@ -32,15 +32,20 @@ export function Navigation() {
   const { currentUser, logoutToUserView, theme, toggleTheme, isSupabase } = useApp();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const isMainAdmin = currentUser.role === 'main_admin';
   const isAdminOrSub = currentUser.role === 'main_admin' || currentUser.role === 'sub_admin';
 
   const navItems = [
     { href: '/', label: 'Summary & Accounts', icon: LayoutDashboard },
     { href: '/tracker', label: '51-Week Grid', icon: CalendarDays },
-    { href: '/payments', label: 'Payments Ledger', icon: Receipt },
-    { href: '/report', label: 'PDF Final Summary', icon: FileText },
-    { href: '/settings', label: 'Fund Settings', icon: Settings },
     ...(isAdminOrSub ? [{ href: '/payments/add', label: '+ Add Payment', icon: PlusCircle, highlight: true }] : []),
+    ...(isMainAdmin
+      ? [
+          { href: '/payments', label: 'Payments Ledger', icon: Receipt },
+          { href: '/report', label: 'PDF Final Summary', icon: FileText },
+          { href: '/settings', label: 'Fund Settings', icon: Settings },
+        ]
+      : []),
   ];
 
   const getRoleBadge = (role: string) => {
@@ -384,44 +389,61 @@ export function Navigation() {
           </Link>
         )}
 
-        {/* Payments Ledger Tab */}
-        <Link
-          href="/payments"
-          className={`flex flex-col items-center py-1 px-1.5 rounded-xl text-[10px] font-medium transition-colors ${
-            pathname.startsWith('/payments') && pathname !== '/payments/add'
-              ? 'text-emerald-400 font-bold'
-              : 'text-slate-400 hover:text-slate-200'
-          }`}
-        >
-          <Receipt className="w-5 h-5 mb-0.5" />
-          <span>Ledger</span>
-        </Link>
+        {/* Payments Ledger Tab (Main Admin Only) */}
+        {isMainAdmin && (
+          <Link
+            href="/payments"
+            className={`flex flex-col items-center py-1 px-1.5 rounded-xl text-[10px] font-medium transition-colors ${
+              pathname.startsWith('/payments') && pathname !== '/payments/add'
+                ? 'text-emerald-400 font-bold'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Receipt className="w-5 h-5 mb-0.5" />
+            <span>Ledger</span>
+          </Link>
+        )}
 
-        {/* PDF Final Summary Tab */}
-        <Link
-          href="/report"
-          className={`flex flex-col items-center py-1 px-1.5 rounded-xl text-[10px] font-medium transition-colors ${
-            pathname === '/report'
-              ? 'text-emerald-400 font-bold'
-              : 'text-slate-400 hover:text-slate-200'
-          }`}
-        >
-          <FileText className="w-5 h-5 mb-0.5" />
-          <span>PDF</span>
-        </Link>
+        {/* PDF Final Summary Tab (Main Admin Only) */}
+        {isMainAdmin && (
+          <Link
+            href="/report"
+            className={`flex flex-col items-center py-1 px-1.5 rounded-xl text-[10px] font-medium transition-colors ${
+              pathname === '/report'
+                ? 'text-emerald-400 font-bold'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <FileText className="w-5 h-5 mb-0.5" />
+            <span>PDF</span>
+          </Link>
+        )}
 
-        {/* Settings Tab */}
-        <Link
-          href="/settings"
-          className={`flex flex-col items-center py-1 px-1.5 rounded-xl text-[10px] font-medium transition-colors ${
-            pathname === '/settings'
-              ? 'text-emerald-400 font-bold'
-              : 'text-slate-400 hover:text-slate-200'
-          }`}
-        >
-          <Settings className="w-5 h-5 mb-0.5" />
-          <span>Settings</span>
-        </Link>
+        {/* Settings Tab (Main Admin Only) */}
+        {isMainAdmin && (
+          <Link
+            href="/settings"
+            className={`flex flex-col items-center py-1 px-1.5 rounded-xl text-[10px] font-medium transition-colors ${
+              pathname === '/settings'
+                ? 'text-emerald-400 font-bold'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Settings className="w-5 h-5 mb-0.5" />
+            <span>Settings</span>
+          </Link>
+        )}
+
+        {/* Sign In button for regular viewers */}
+        {!isAdminOrSub && (
+          <button
+            onClick={() => setLoginModalOpen(true)}
+            className="flex flex-col items-center py-1 px-1.5 rounded-xl text-[10px] font-medium text-slate-400 hover:text-amber-300 transition-colors"
+          >
+            <KeyRound className="w-5 h-5 mb-0.5 text-amber-300" />
+            <span>Sign In</span>
+          </button>
+        )}
       </nav>
     </>
   );
