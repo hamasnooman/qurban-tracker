@@ -15,10 +15,6 @@ import {
   Share2,
   X,
   Sparkles,
-  AlertTriangle,
-  CheckCircle2,
-  TrendingUp,
-  Image as ImageIcon,
   MessageCircle,
 } from 'lucide-react';
 
@@ -60,12 +56,22 @@ export function SummaryPngModal({
     setTimeout(() => setToastMessage(null), 3500);
   };
 
-  // Image export options
-  const getImageOptions = () => ({
-    cacheBust: true,
-    pixelRatio: 2.5,
-    backgroundColor: theme === 'emerald' ? '#042f2e' : '#ffffff',
-  });
+  // Image export options ensuring full natural height & no cutoff
+  const getImageOptions = () => {
+    const node = cardRef.current;
+    return {
+      cacheBust: true,
+      pixelRatio: 2.5,
+      backgroundColor: theme === 'emerald' ? '#042f2e' : '#ffffff',
+      height: node ? node.scrollHeight : undefined,
+      width: node ? node.scrollWidth : undefined,
+      style: {
+        height: 'auto',
+        maxHeight: 'none',
+        overflow: 'visible',
+      },
+    };
+  };
 
   // 1. Download PNG Image
   const handleDownloadPng = async () => {
@@ -75,7 +81,7 @@ export function SummaryPngModal({
     try {
       const dataUrl = await toPng(cardRef.current, getImageOptions());
       const link = document.createElement('a');
-      link.download = `Qurban_4_Persons_Summary_Week_${currentWeek}.png`;
+      link.download = `Qurban_Summary_Week_${currentWeek}.png`;
       link.href = dataUrl;
       link.click();
       showToast('✓ PNG downloaded successfully! Ready to share on WhatsApp.');
@@ -150,33 +156,27 @@ export function SummaryPngModal({
   // 4. Copy WhatsApp Text
   const handleCopyWhatsappText = () => {
     const text = `🌙 *${settings.fund_name}*
-📅 *4-Person Summary · Week ${currentWeek} of ${settings.total_weeks}* (${todayFormatted})
+📅 *Summary · Week ${currentWeek} of ${settings.total_weeks}* (${todayFormatted})
 ━━━━━━━━━━━━━━━━━━━━
 
 ${financialStatuses
   .map((s, idx) => {
     const dueText =
       s.balance < 0
-        ? `⚠️ Due: ${formatCurrency(Math.abs(s.balance))} (${s.weeks_behind}w behind)`
+        ? `⚠️ Due: ${formatCurrency(Math.abs(s.balance))}`
         : s.balance > 0
-        ? `🌟 Advance: +${formatCurrency(s.balance)} (${s.weeks_ahead}w ahead)`
-        : `✅ Up to date (Rs. 0 Due)`;
+        ? `🌟 Advance: +${formatCurrency(s.balance)}`
+        : `✅ Up to date (Rs. 0)`;
 
     return `${idx + 1}️⃣ *${s.family_name}*
    • Total Paid: ${formatCurrency(s.total_paid)}
-   • Status: ${dueText}`;
+   • Due: ${dueText}`;
   })
   .join('\n\n')}
 
 ━━━━━━━━━━━━━━━━━━━━
 💰 *Total Fund Collected:* ${formatCurrency(totalCollected)}
 ${totalDue > 0 ? `⚠️ *Total Amount Due:* ${formatCurrency(totalDue)}\n` : '✅ *All accounts up to date!*\n'}
-🏦 *Bank Accounts for Transfer:*
-• Commercial Bank: 8016292617 (M N Hamas)
-• Amana Bank: 0110578227001 (MN Hamas)
-• BOC: 96503121 (MN Hamas)
-
-_Please send payment slips on WhatsApp._
 Jazakallahu Khairan 🤲 · #QurbanFamily2027`;
 
     navigator.clipboard.writeText(text);
@@ -199,13 +199,13 @@ Jazakallahu Khairan 🤲 · #QurbanFamily2027`;
             </div>
             <div>
               <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-1.5">
-                <span>4-Person Summary Image</span>
+                <span>4-Person Summary Card</span>
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
                   Ready to Share
                 </span>
               </h3>
               <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                Shows each person&apos;s Total Paid, Due amount, and overall totals
+                Simple & clean: 4 persons&apos; Total Paid, Due amount, and overall totals
               </p>
             </div>
           </div>
@@ -260,9 +260,9 @@ Jazakallahu Khairan 🤲 · #QurbanFamily2027`;
         </div>
 
         {/* ================= SCROLLABLE PREVIEW AREA ================= */}
-        <div className="p-4 sm:p-5 overflow-y-auto flex-1 flex justify-center bg-slate-200/50 dark:bg-black/40">
+        <div className="p-4 sm:p-5 overflow-y-auto flex-1 flex justify-center items-start bg-slate-200/50 dark:bg-black/40">
           
-          {/* ================= THE FOCUSED 4-PERSON SUMMARY CARD ================= */}
+          {/* ================= THE PURE 4-PERSON SUMMARY CARD ================= */}
           <div
             ref={cardRef}
             style={{
@@ -271,13 +271,13 @@ Jazakallahu Khairan 🤲 · #QurbanFamily2027`;
               backgroundColor: isEmerald ? '#042f2e' : '#ffffff',
               color: isEmerald ? '#ffffff' : '#0f172a',
             }}
-            className={`rounded-3xl p-5 sm:p-6 shadow-xl border transition-all space-y-4 ${
+            className={`rounded-3xl p-5 sm:p-6 shadow-xl border transition-all ${
               isEmerald ? 'border-emerald-700' : 'border-slate-300'
             }`}
           >
-            {/* 1. Header */}
+            {/* 1. Clean Header */}
             <div
-              className={`pb-3 border-b flex items-center justify-between gap-3 ${
+              className={`pb-3.5 border-b flex items-center justify-between gap-3 ${
                 isEmerald ? 'border-emerald-800/80' : 'border-slate-200'
               }`}
             >
@@ -296,7 +296,7 @@ Jazakallahu Khairan 🤲 · #QurbanFamily2027`;
                     {settings.fund_name}
                   </h2>
                   <p
-                    className={`text-[11px] font-medium ${
+                    className={`text-xs font-semibold ${
                       isEmerald ? 'text-emerald-300/90' : 'text-slate-500'
                     }`}
                   >
@@ -307,7 +307,7 @@ Jazakallahu Khairan 🤲 · #QurbanFamily2027`;
 
               <div className="text-right shrink-0">
                 <span
-                  className={`inline-block px-2.5 py-0.5 rounded-lg text-[11px] font-black ${
+                  className={`inline-block px-2.5 py-0.5 rounded-lg text-xs font-black ${
                     isEmerald
                       ? 'bg-amber-400 text-slate-950 shadow-xs'
                       : 'bg-emerald-700 text-white'
@@ -325,57 +325,49 @@ Jazakallahu Khairan 🤲 · #QurbanFamily2027`;
               </div>
             </div>
 
-            {/* 2. The 4 Persons Summary Table / Cards */}
-            <div className="space-y-2">
-              <div
-                className={`text-[10px] font-bold uppercase tracking-wider grid grid-cols-12 px-2 pb-1 ${
-                  isEmerald ? 'text-emerald-300/80' : 'text-slate-500'
-                }`}
-              >
-                <span className="col-span-5">Person / Family</span>
-                <span className="col-span-3 text-right">Total Paid</span>
-                <span className="col-span-4 text-right">Status / Due</span>
-              </div>
+            {/* 2. Table Column Headers */}
+            <div
+              className={`text-[11px] font-bold uppercase tracking-wider grid grid-cols-12 px-3 pt-3 pb-1.5 ${
+                isEmerald ? 'text-emerald-300/80' : 'text-slate-500'
+              }`}
+            >
+              <span className="col-span-5">Person</span>
+              <span className="col-span-3 text-right">Total Paid</span>
+              <span className="col-span-4 text-right">Due / Status</span>
+            </div>
 
+            {/* 3. The 4 Persons Rows */}
+            <div className="space-y-1.5">
               {financialStatuses.map((s, idx) => {
-                const isDue = s.status === 'due';
-                const isAdvance = s.status === 'advance';
+                const isDue = s.balance < 0;
+                const isAdvance = s.balance > 0;
 
                 return (
                   <div
                     key={s.family_id}
-                    className={`grid grid-cols-12 items-center p-3 rounded-2xl border transition-colors ${
+                    className={`grid grid-cols-12 items-center px-3 py-2.5 rounded-2xl border transition-colors ${
                       isEmerald
-                        ? 'bg-emerald-900/40 border-emerald-800/90'
+                        ? 'bg-emerald-900/40 border-emerald-800/80'
                         : 'bg-slate-50 border-slate-200'
                     }`}
                   >
                     {/* Person Name */}
-                    <div className="col-span-5 min-w-0 pr-1">
-                      <div className="flex items-center gap-1.5">
-                        <span
-                          className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${
-                            isEmerald
-                              ? 'bg-emerald-800 text-amber-300'
-                              : 'bg-slate-200 text-slate-700'
-                          }`}
-                        >
-                          {idx + 1}
-                        </span>
-                        <div
-                          className={`font-black text-sm tracking-tight truncate ${
-                            isEmerald ? 'text-white' : 'text-slate-900'
-                          }`}
-                        >
-                          {s.family_name}
-                        </div>
-                      </div>
-                      <div
-                        className={`text-[10px] pl-6.5 font-medium ${
-                          isEmerald ? 'text-emerald-300/70' : 'text-slate-500'
+                    <div className="col-span-5 min-w-0 pr-1 flex items-center gap-2">
+                      <span
+                        className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${
+                          isEmerald
+                            ? 'bg-emerald-800 text-amber-300'
+                            : 'bg-slate-200 text-slate-700'
                         }`}
                       >
-                        Rs. 1,500 / week
+                        {idx + 1}
+                      </span>
+                      <div
+                        className={`font-black text-sm tracking-tight truncate ${
+                          isEmerald ? 'text-white' : 'text-slate-900'
+                        }`}
+                      >
+                        {s.family_name}
                       </div>
                     </div>
 
@@ -388,69 +380,43 @@ Jazakallahu Khairan 🤲 · #QurbanFamily2027`;
                       >
                         {formatCurrency(s.total_paid)}
                       </div>
-                      <div
-                        className={`text-[9px] font-mono ${
-                          isEmerald ? 'text-emerald-300/70' : 'text-slate-500'
-                        }`}
-                      >
-                        {(s.total_paid / 1500).toFixed(0)} of {settings.total_weeks} wks
-                      </div>
                     </div>
 
                     {/* Due / Balance Status */}
                     <div className="col-span-4 text-right">
                       {isDue ? (
-                        <div>
-                          <span
-                            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-xs font-black ${
-                              isEmerald
-                                ? 'bg-rose-950 text-rose-300 border border-rose-700'
-                                : 'bg-rose-100 text-rose-800 border border-rose-300'
-                            }`}
-                          >
-                            <span>⚠️</span>
-                            <span>{formatCurrency(Math.abs(s.balance))} Due</span>
-                          </span>
-                          <div className="text-[9px] font-semibold text-rose-500 mt-0.5">
-                            {s.weeks_behind} {s.weeks_behind === 1 ? 'week' : 'weeks'} behind
-                          </div>
-                        </div>
+                        <span
+                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-black ${
+                            isEmerald
+                              ? 'bg-rose-950 text-rose-300 border border-rose-700'
+                              : 'bg-rose-100 text-rose-800 border border-rose-300'
+                          }`}
+                        >
+                          <span>⚠️</span>
+                          <span>{formatCurrency(Math.abs(s.balance))} Due</span>
+                        </span>
                       ) : isAdvance ? (
-                        <div>
-                          <span
-                            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-xs font-black ${
-                              isEmerald
-                                ? 'bg-amber-950 text-amber-300 border border-amber-700'
-                                : 'bg-amber-100 text-amber-900 border border-amber-300'
-                            }`}
-                          >
-                            <span>🌟</span>
-                            <span>+{formatCurrency(s.balance)}</span>
-                          </span>
-                          <div className="text-[9px] font-semibold text-amber-500 mt-0.5">
-                            {s.weeks_ahead}w ahead (Adv)
-                          </div>
-                        </div>
+                        <span
+                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-black ${
+                            isEmerald
+                              ? 'bg-amber-950 text-amber-300 border border-amber-700'
+                              : 'bg-amber-100 text-amber-900 border border-amber-300'
+                          }`}
+                        >
+                          <span>🌟</span>
+                          <span>+{formatCurrency(s.balance)} (Adv)</span>
+                        </span>
                       ) : (
-                        <div>
-                          <span
-                            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-xs font-black ${
-                              isEmerald
-                                ? 'bg-emerald-900 text-emerald-200 border border-emerald-600'
-                                : 'bg-emerald-100 text-emerald-900 border border-emerald-300'
-                            }`}
-                          >
-                            <span>✅</span>
-                            <span>Up to date</span>
-                          </span>
-                          <div
-                            className={`text-[9px] font-medium mt-0.5 ${
-                              isEmerald ? 'text-emerald-300/80' : 'text-slate-500'
-                            }`}
-                          >
-                            Rs. 0 Due
-                          </div>
-                        </div>
+                        <span
+                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-black ${
+                            isEmerald
+                              ? 'bg-emerald-900 text-emerald-200 border border-emerald-600'
+                              : 'bg-emerald-100 text-emerald-900 border border-emerald-300'
+                          }`}
+                        >
+                          <span>✅</span>
+                          <span>Up to date</span>
+                        </span>
                       )}
                     </div>
                   </div>
@@ -458,25 +424,24 @@ Jazakallahu Khairan 🤲 · #QurbanFamily2027`;
               })}
             </div>
 
-            {/* 3. Total Row */}
+            {/* 4. Total Summary Row */}
             <div
-              className={`p-3.5 rounded-2xl border ${
+              className={`mt-3 p-3.5 rounded-2xl border ${
                 isEmerald
-                  ? 'bg-emerald-950 border-emerald-800 text-white'
-                  : 'bg-emerald-50/80 border-emerald-200 text-slate-900'
+                  ? 'bg-emerald-950/90 border-emerald-700 text-white'
+                  : 'bg-emerald-50 border-emerald-200 text-slate-900'
               }`}
             >
-              <div className="flex items-center justify-between">
-                <div>
+              <div className="grid grid-cols-12 items-center px-1">
+                <div className="col-span-5 font-black text-xs uppercase tracking-wider flex items-center gap-1.5">
+                  <span className={isEmerald ? 'text-amber-300' : 'text-emerald-800'}>
+                    Total (4 Persons)
+                  </span>
+                </div>
+
+                <div className="col-span-3 text-right pr-1">
                   <div
-                    className={`text-[10px] font-black uppercase tracking-wider ${
-                      isEmerald ? 'text-emerald-300' : 'text-emerald-900'
-                    }`}
-                  >
-                    Total Fund Collected (4 Persons)
-                  </div>
-                  <div
-                    className={`text-xl font-black mt-0.5 ${
+                    className={`font-black text-base sm:text-lg ${
                       isEmerald ? 'text-amber-300' : 'text-emerald-800'
                     }`}
                   >
@@ -484,62 +449,42 @@ Jazakallahu Khairan 🤲 · #QurbanFamily2027`;
                   </div>
                 </div>
 
-                <div className="text-right">
-                  <div
-                    className={`text-[10px] font-black uppercase tracking-wider ${
-                      totalDue > 0
-                        ? 'text-rose-500'
-                        : isEmerald
-                        ? 'text-emerald-300'
-                        : 'text-emerald-900'
-                    }`}
-                  >
-                    {totalDue > 0 ? 'Total Outstanding Due' : 'Overall Status'}
-                  </div>
-                  <div
-                    className={`text-base font-black mt-0.5 ${
-                      totalDue > 0
-                        ? 'text-rose-400'
-                        : isEmerald
-                        ? 'text-emerald-300'
-                        : 'text-emerald-700'
-                    }`}
-                  >
-                    {totalDue > 0 ? `${formatCurrency(totalDue)} Due` : '✅ All Up to Date'}
-                  </div>
+                <div className="col-span-4 text-right">
+                  {totalDue > 0 ? (
+                    <span
+                      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-black ${
+                        isEmerald
+                          ? 'bg-rose-900 text-rose-200 border border-rose-600'
+                          : 'bg-rose-100 text-rose-800 border border-rose-300'
+                      }`}
+                    >
+                      <span>{formatCurrency(totalDue)} Due</span>
+                    </span>
+                  ) : (
+                    <span
+                      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-black ${
+                        isEmerald
+                          ? 'bg-emerald-850 text-emerald-200 border border-emerald-600'
+                          : 'bg-emerald-100 text-emerald-900 border border-emerald-300'
+                      }`}
+                    >
+                      <span>✅ All Clear</span>
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
 
-            {/* 4. Compact Bank Transfer Info */}
+            {/* 5. Minimal Footer */}
             <div
-              className={`p-2.5 rounded-xl border text-[10px] space-y-1 ${
-                isEmerald
-                  ? 'bg-emerald-900/30 border-emerald-800 text-emerald-200'
-                  : 'bg-slate-50 border-slate-200 text-slate-700'
-              }`}
-            >
-              <div className="font-bold flex items-center justify-between">
-                <span>🏦 Bank Accounts for Contributions (Rs. 1,500/wk):</span>
-                <span className="opacity-75">A/C: M N Hamas</span>
-              </div>
-              <div className="font-mono text-[9px] flex flex-wrap gap-x-3 gap-y-0.5 opacity-90">
-                <span>• Comm Bank: <strong>8016292617</strong></span>
-                <span>• Amana Bank: <strong>0110578227001</strong></span>
-                <span>• BOC: <strong>96503121</strong></span>
-              </div>
-            </div>
-
-            {/* 5. Footer */}
-            <div
-              className={`pt-2 border-t flex items-center justify-between text-[9px] font-medium ${
+              className={`mt-3 pt-2.5 border-t flex items-center justify-between text-[10px] font-medium ${
                 isEmerald
                   ? 'border-emerald-800/80 text-emerald-300/80'
                   : 'border-slate-200 text-slate-500'
               }`}
             >
-              <div>Please share bank transfer slip on WhatsApp</div>
-              <div className="font-mono">#QurbanFamily2027 · Eid 2027 🤲</div>
+              <div>Mr. Hamas (Main Admin)</div>
+              <div className="font-mono">#QurbanFamily2027 · Jazakallahu Khairan 🤲</div>
             </div>
           </div>
         </div>
@@ -547,7 +492,7 @@ Jazakallahu Khairan 🤲 · #QurbanFamily2027`;
         {/* ================= MODAL BOTTOM ACTION BAR ================= */}
         <div className="p-4 sm:p-5 bg-slate-50/90 dark:bg-slate-900/80 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 shrink-0">
           <div className="text-xs text-slate-500 dark:text-slate-400">
-            <span className="font-bold text-slate-700 dark:text-slate-300">High-DPI PNG</span> · Crisp for WhatsApp
+            <span className="font-bold text-slate-700 dark:text-slate-300">Clean 4-Person Card</span> · Ready for WhatsApp
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
