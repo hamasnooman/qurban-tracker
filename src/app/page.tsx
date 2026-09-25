@@ -27,7 +27,10 @@ import {
   Sparkles,
   ExternalLink,
   FileText,
+  Download,
+  Image as ImageIcon,
 } from 'lucide-react';
+import { SummaryPngModal } from '@/components/SummaryPngModal';
 
 export default function DashboardPage() {
   const {
@@ -40,6 +43,7 @@ export default function DashboardPage() {
   } = useApp();
 
   const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [pngModalOpen, setPngModalOpen] = useState(false);
   const [copiedAccount, setCopiedAccount] = useState<string | null>(null);
   const [copiedWhatsapp, setCopiedWhatsapp] = useState(false);
 
@@ -175,6 +179,15 @@ Jazakallahu Khairan 🤲 · #QurbanFamily2027`;
           )}
 
           <button
+            onClick={() => setPngModalOpen(true)}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs shadow-md transition-all active:scale-95 cursor-pointer"
+            title="Download or share high-resolution summary image (PNG) for WhatsApp"
+          >
+            <Download className="w-4 h-4 text-slate-950" />
+            <span>Download PNG Summary</span>
+          </button>
+
+          <button
             onClick={handleCopyWhatsapp}
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-800/80 hover:bg-emerald-700/80 text-white border border-emerald-600/60 text-xs font-bold transition-all active:scale-95 shadow-xs"
             title="Copy formatted WhatsApp summary"
@@ -209,6 +222,12 @@ Jazakallahu Khairan 🤲 · #QurbanFamily2027`;
       <AdminLoginModal
         isOpen={loginModalOpen}
         onClose={() => setLoginModalOpen(false)}
+      />
+
+      {/* Summary PNG Modal */}
+      <SummaryPngModal
+        isOpen={pngModalOpen}
+        onClose={() => setPngModalOpen(false)}
       />
 
       {/* ================= 3. KPI METRIC STRIP ================= */}
@@ -290,13 +309,24 @@ Jazakallahu Khairan 🤲 · #QurbanFamily2027`;
             </h2>
           </div>
 
-          <Link
-            href="/tracker"
-            className="text-xs font-bold text-emerald-700 dark:text-emerald-400 hover:underline flex items-center gap-1 shrink-0"
-          >
-            <span>Full 51-Week Ledger</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
+          <div className="flex items-center gap-2.5">
+            <button
+              onClick={() => setPngModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-xs font-bold transition-all cursor-pointer active:scale-95 shadow-2xs"
+              title="Download or share high-resolution PNG image of this summary table"
+            >
+              <Download className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+              <span>Download PNG</span>
+            </button>
+
+            <Link
+              href="/tracker"
+              className="text-xs font-bold text-emerald-700 dark:text-emerald-400 hover:underline flex items-center gap-1 shrink-0"
+            >
+              <span>Full 51-Week Ledger</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
         </div>
 
         <div className="overflow-x-auto">

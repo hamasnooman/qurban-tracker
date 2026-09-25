@@ -38,6 +38,7 @@ export function Navigation() {
   const navItems = [
     { href: '/', label: 'Summary & Accounts', icon: LayoutDashboard },
     { href: '/tracker', label: '51-Week Grid', icon: CalendarDays },
+    { href: '/weekly-card', label: 'Share Cards & PNG', icon: Share2 },
     ...(isAdminOrSub ? [{ href: '/payments/add', label: '+ Add Payment', icon: PlusCircle, highlight: true }] : []),
     ...(isMainAdmin
       ? [

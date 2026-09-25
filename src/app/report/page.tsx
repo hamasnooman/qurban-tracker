@@ -26,10 +26,12 @@ import {
   KeyRound,
   Download,
 } from 'lucide-react';
+import { SummaryPngModal } from '@/components/SummaryPngModal';
 
 export default function ReportPage() {
   const { families, payments, settings, financialStatuses, currentUser } = useApp();
   const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [pngModalOpen, setPngModalOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'due' | 'all'>('due');
 
   const isMainAdmin = currentUser.role === 'main_admin';
@@ -150,6 +152,15 @@ export default function ReportPage() {
               All 51 Weeks
             </button>
           </div>
+
+          <button
+            onClick={() => setPngModalOpen(true)}
+            className="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs shadow-md transition-all active:scale-95 flex items-center gap-2 cursor-pointer"
+            title="Download high-resolution PNG summary to share on WhatsApp"
+          >
+            <Download className="w-4 h-4 text-slate-950" />
+            <span>Download Summary PNG</span>
+          </button>
 
           <button
             onClick={handlePrint}
@@ -605,6 +616,9 @@ export default function ReportPage() {
           </div>
         </div>
       </div>
+
+      {/* Summary PNG Modal */}
+      <SummaryPngModal isOpen={pngModalOpen} onClose={() => setPngModalOpen(false)} />
     </div>
   );
 }

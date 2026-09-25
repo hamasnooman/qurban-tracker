@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
+import Link from 'next/link';
 import { useApp } from '@/context/AppContext';
 import {
   calculateWeeklyGrid,
@@ -10,7 +11,7 @@ import {
   getWeekDate,
   getWeeksDue,
 } from '@/lib/calculations';
-import { toPng } from 'html-to-image';
+import { toPng, toBlob } from 'html-to-image';
 import {
   Share2,
   Download,
@@ -19,7 +20,12 @@ import {
   ChevronLeft,
   ChevronRight,
   MessageCircle,
+  ArrowLeft,
+  Sparkles,
+  Layers,
+  Image as ImageIcon,
 } from 'lucide-react';
+import { SummaryPngModal } from '@/components/SummaryPngModal';
 
 export default function WeeklyCardPage() {
   const { families, payments, settings } = useApp();
@@ -30,6 +36,9 @@ export default function WeeklyCardPage() {
   const [cardTheme, setCardTheme] = useState<'white' | 'dark'>('white');
   const [isDownloading, setIsDownloading] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
+  const [copyImageSuccess, setCopyImageSuccess] = useState(false);
+  const [shareSuccess, setShareSuccess] = useState(false);
+  const [summaryModalOpen, setSummaryModalOpen] = useState(false);
 
   // Compute status for the selected week
   const weekDate = getWeekDate(settings.start_date, selectedWeek);
@@ -95,7 +104,7 @@ Jazakallahu Khairan 🤲 · #QurbanFamily2027`;
     try {
       const dataUrl = await toPng(cardRef.current, {
         cacheBust: true,
-        pixelRatio: 2,
+        pixelRatio: 2.5,
         backgroundColor: cardTheme === 'white' ? '#ffffff' : '#042f2e',
       });
 
@@ -110,6 +119,71 @@ Jazakallahu Khairan 🤲 · #QurbanFamily2027`;
     }
   };
 
+  // Copy card directly to clipboard
+  const handleCopyImage = async () => {
+    if (!cardRef.current) return;
+    setIsDownloading(true);
+
+    try {
+      const blob = await toBlob(cardRef.current, {
+        cacheBust: true,
+        pixelRatio: 2.5,
+        backgroundColor: cardTheme === 'white' ? '#ffffff' : '#042f2e',
+      });
+
+      if (blob && navigator.clipboard && typeof window.ClipboardItem !== 'undefined') {
+        await navigator.clipboard.write([
+          new ClipboardItem({ 'image/png': blob }),
+        ]);
+        setCopyImageSuccess(true);
+        setTimeout(() => setCopyImageSuccess(false), 2500);
+      } else {
+        handleDownloadImage();
+      }
+    } catch (err) {
+      console.error('Failed to copy image:', err);
+      handleDownloadImage();
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  // Web Share API
+  const handleShareImage = async () => {
+    if (!cardRef.current) return;
+    setIsDownloading(true);
+
+    try {
+      const blob = await toBlob(cardRef.current, {
+        cacheBust: true,
+        pixelRatio: 2.5,
+        backgroundColor: cardTheme === 'white' ? '#ffffff' : '#042f2e',
+      });
+
+      if (blob) {
+        const file = new File([blob], `Qurban_Fund_Week_${selectedWeek}.png`, { type: 'image/png' });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: `Qurban Fund Week ${selectedWeek} Summary`,
+            text: `🌙 Qurban Family Savings - Week ${selectedWeek} Card`,
+          });
+          setShareSuccess(true);
+          setTimeout(() => setShareSuccess(false), 2500);
+        } else {
+          handleCopyImage();
+        }
+      }
+    } catch (err) {
+      if ((err as Error).name !== 'AbortError') {
+        console.error('Share error:', err);
+        handleDownloadImage();
+      }
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
   // Copy WhatsApp formatted text
   const handleCopyWhatsAppText = () => {
     navigator.clipboard.writeText(whatsappMessageText);
@@ -118,7 +192,27 @@ Jazakallahu Khairan 🤲 · #QurbanFamily2027`;
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-5">
+    <div className="max-w-3xl mx-auto space-y-5">
+      {/* Top Navigation Strip */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-emerald-700 dark:hover:text-emerald-400 p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>← Back to Summary & Accounts</span>
+        </Link>
+
+        <button
+          onClick={() => setSummaryModalOpen(true)}
+          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs shadow-xs transition-all active:scale-95 cursor-pointer"
+          title="Download overall fund summary PNG"
+        >
+          <Layers className="w-3.5 h-3.5 text-slate-950" />
+          <span>Overall Fund Summary PNG</span>
+        </button>
+      </div>
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
@@ -136,7 +230,7 @@ Jazakallahu Khairan 🤲 · #QurbanFamily2027`;
           <button
             onClick={() => setSelectedWeek((w) => Math.max(1, w - 1))}
             disabled={selectedWeek <= 1}
-            className="p-1 rounded-lg text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 disabled:opacity-30"
+            className="p-1 rounded-lg text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 disabled:opacity-30 cursor-pointer"
             title="Previous Week"
           >
             <ChevronLeft className="w-4 h-4" />
@@ -147,7 +241,7 @@ Jazakallahu Khairan 🤲 · #QurbanFamily2027`;
           <button
             onClick={() => setSelectedWeek((w) => Math.min(settings.total_weeks, w + 1))}
             disabled={selectedWeek >= settings.total_weeks}
-            className="p-1 rounded-lg text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 disabled:opacity-30"
+            className="p-1 rounded-lg text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 disabled:opacity-30 cursor-pointer"
             title="Next Week"
           >
             <ChevronRight className="w-4 h-4" />
@@ -160,7 +254,7 @@ Jazakallahu Khairan 🤲 · #QurbanFamily2027`;
         <div className="flex items-center gap-2">
           <button
             onClick={() => setCardTheme('white')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               cardTheme === 'white'
                 ? 'bg-stone-900 text-white dark:bg-white dark:text-stone-900 shadow-xs'
                 : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400'
@@ -170,7 +264,7 @@ Jazakallahu Khairan 🤲 · #QurbanFamily2027`;
           </button>
           <button
             onClick={() => setCardTheme('dark')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               cardTheme === 'dark'
                 ? 'bg-emerald-800 text-white shadow-xs'
                 : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400'
@@ -180,22 +274,65 @@ Jazakallahu Khairan 🤲 · #QurbanFamily2027`;
           </button>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Download Image Button */}
           <button
             onClick={handleDownloadImage}
             disabled={isDownloading}
-            className="px-3.5 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-xs transition-all flex items-center gap-1.5"
+            className="px-3.5 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
           >
             <Download className="w-3.5 h-3.5 text-amber-300" />
-            <span>{isDownloading ? 'Saving...' : 'Download Image'}</span>
+            <span>{isDownloading ? 'Saving...' : 'Download PNG'}</span>
           </button>
+
+          {/* Copy Image Button */}
+          <button
+            onClick={handleCopyImage}
+            disabled={isDownloading}
+            className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+            title="Copy image to clipboard (paste in WhatsApp Web / Ctrl+V)"
+          >
+            {copyImageSuccess ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Image Copied!</span>
+              </>
+            ) : (
+              <>
+                <ImageIcon className="w-3.5 h-3.5 text-amber-300" />
+                <span>Copy Image</span>
+              </>
+            )}
+          </button>
+
+          {/* Share Image Button */}
+          <button
+            onClick={handleShareImage}
+            disabled={isDownloading}
+            className="px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+            title="Share image via mobile WhatsApp / apps"
+          >
+            {shareSuccess ? (
+              <>
+                <Check className="w-3.5 h-3.5" />
+                <span>Shared!</span>
+              </>
+            ) : (
+              <>
+                <Share2 className="w-3.5 h-3.5" />
+                <span>Share</span>
+              </>
+            )}
+          </button>
+
+          {/* Copy Text Button */}
           <button
             onClick={handleCopyWhatsAppText}
-            className="px-3.5 py-1.5 rounded-xl bg-stone-900 hover:bg-stone-800 text-white dark:bg-white dark:text-stone-900 dark:hover:bg-stone-100 font-bold text-xs shadow-xs transition-all flex items-center gap-1.5"
+            className="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 dark:bg-stone-800 dark:text-stone-200 dark:hover:bg-stone-700 font-bold text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
           >
             {copySuccess ? (
               <>
-                <Check className="w-3.5 h-3.5 text-emerald-400" />
+                <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                 <span>Copied!</span>
               </>
             ) : (
@@ -437,6 +574,13 @@ Jazakallahu Khairan 🤲 · #QurbanFamily2027`;
           {whatsappMessageText}
         </div>
       </div>
+
+      {/* Overall Summary PNG Modal */}
+      <SummaryPngModal
+        isOpen={summaryModalOpen}
+        onClose={() => setSummaryModalOpen(false)}
+        defaultMode="overall"
+      />
     </div>
   );
 }
